@@ -1,5 +1,5 @@
 # ============================================================
-# ISRO AQI & HCHO Analysis - Runtime Dependencies
+# AQI & HCHO Analysis - Runtime Dependencies
 # ============================================================
 
 # Core
