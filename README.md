@@ -129,10 +129,10 @@ streamlit run dashboard/app.py
 
 **Team Swachh Agam**
 
-- **Amarjit Verma** — Team Lead + AQI Modeling
-- **Member 2** — Satellite Data & Preprocessing
-- **Member 3** — HCHO & Fire Analysis
-- **Member 4** — Dashboard & Visualization
+- **Amarjit Verma** — Team Lead & QA
+- **Siddharth Yadav** — Satellite Data & Preprocessing
+- **Anurag Kumar** — HCHO & Fire Analysis
+- **Ravi Kumar** — Dashboard & Visualization
 
 ---
 
