@@ -1,0 +1,63 @@
+# ============================================================
+# Master Configuration
+# ============================================================
+
+project:
+  name: "AQI & HCHO Hotspot Analysis"
+  version: "1.0.0"
+  description: "Satellite-based Surface AQI Prediction & HCHO Hotspot Analysis over India"
+  team: "Swachh Agam"
+  date: "July 2026"
+
+# Data configuration
+data:
+  grid_resolution: 0.25
+  grid_size: 120
+  india_bounds:
+    lat_min: 8
+    lat_max: 38
+    lon_min: 68
+    lon_max: 98
+  raw_data_dir: "data/raw"
+  interim_data_dir: "data/interim"
+  processed_data_dir: "data/processed"
+  external_data_dir: "data/external"
+
+# Model configuration
+model:
+  seq_length: 7
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  dropout_rate: 0.3
+  early_stopping_patience: 10
+
+# Analysis configuration
+analysis:
+  dbscan_eps: 0.5
+  dbscan_min_samples: 4
+  hcho_percentile: 90
+  max_lag: 3
+  decay_constant: 0.02
+
+# Dashboard configuration
+dashboard:
+  port: 8501
+  theme: "dark"
+  title: "Swachh Agam - Air Quality Dashboard"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function} - {message}"
+  file: "runtime/logs/app.log"
+  rotation: "10 MB"
+  retention: "7 days"
+
+# Paths
+paths:
+  data: "data"
+  outputs: "outputs"
+  models: "models/checkpoints"
+  logs: "runtime/logs"
+  dashboard_data: "dashboard/cache"
