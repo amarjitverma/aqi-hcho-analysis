@@ -1,8 +1,8 @@
 # ============================================================
-# AQI & HCHO Analysis - Runtime Dependencies
+# AQI & HCHO Hotspot Analysis - Runtime Dependencies
 # ============================================================
 
-# Core
+# Core Data Processing
 numpy==1.24.3
 pandas==2.0.3
 xarray==2023.7.0
