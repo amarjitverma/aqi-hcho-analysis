@@ -8,8 +8,8 @@
 
 This project addresses two critical air quality challenges in India:
 
-1. **Surface AQI Prediction** — Predict PM2.5 concentrations using satellite data and deep learning (LSTM, CNN-LSTM, ConvLSTM, Transformer).
-2. **HCHO Hotspot Detection** — Identify formaldehyde hotspots from biomass burning using DBSCAN clustering and analyze fire-HCHO correlation.
+1. **Surface AQI Prediction**: Predict PM2.5 concentrations using satellite data and deep learning (LSTM, CNN-LSTM, ConvLSTM, Transformer).
+2. **HCHO Hotspot Detection**: Identify formaldehyde hotspots from biomass burning using DBSCAN clustering and analyze fire-HCHO correlation.
 
 Built for **ISRO Bharatiya Antariksh Hackathon 2026**.
 
