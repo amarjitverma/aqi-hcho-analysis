@@ -69,10 +69,6 @@ st.markdown("""
         transition: background-color 0.2s ease;
     }
     .stButton > button:hover { background-color: #2EA043; }
-    .reportview-container .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -244,72 +240,42 @@ with tab1:
     st.header("Interactive Map View")
     st.caption(f"Showing data for: {date.strftime('%B %d, %Y')}")
     
-    col1, col2 = st.columns([3, 1])
+    # Create map
+    m = folium.Map(
+        location=[20.5937, 78.9629],
+        zoom_start=5,
+        tiles="CartoDB dark_matter",
+        control_scale=True
+    )
     
-    with col1:
-        # Create map
-        m = folium.Map(
-            location=[20.5937, 78.9629],
-            zoom_start=5,
-            tiles="CartoDB dark_matter",
-            control_scale=True
-        )
-        
-        # Add HCHO hotspots
-        if layers.get("HCHO", True) and data.get("hotspots"):
-            hotspots = data["hotspots"]
-            for feature in hotspots.get("features", []):
-                props = feature.get("properties", {})
-                coords = feature.get("geometry", {}).get("coordinates", [0, 0])
-                if len(coords) >= 2:
-                    folium.CircleMarker(
-                        location=[coords[1], coords[0]],
-                        radius=props.get("radius", 5),
-                        popup=f"""
-                        <div style="font-family: Arial; min-width: 150px;">
-                            <b>Cluster {props.get('cluster_id', 'Unknown')}</b><br>
-                            <hr>
-                            <b>Cells:</b> {props.get('num_cells', 0)}<br>
-                            <b>Mean HCHO:</b> {props.get('mean_hcho', 0):.4f} mol/m²<br>
-                            <b>Max HCHO:</b> {props.get('max_hcho', 0):.4f} mol/m²<br>
-                            <b>Source:</b> {props.get('source_region', 'Unknown')}
-                        </div>
-                        """,
-                        color=props.get("color", "#FF6B35"),
-                        fill=True,
-                        fill_color=props.get("color", "#FF6B35"),
-                        fill_opacity=0.7
-                    ).add_to(m)
-        
-        # Add fire locations if enabled
-        if layers.get("Fire", False) and data.get("fires"):
-            fires = data["fires"]
-            for feature in fires.get("features", []):
-                coords = feature.get("geometry", {}).get("coordinates", [0, 0])
-                if len(coords) >= 2:
-                    folium.CircleMarker(
-                        location=[coords[1], coords[0]],
-                        radius=3,
-                        color="#FF1744",
-                        fill=True,
-                        fill_color="#FF1744",
-                        fill_opacity=0.8
-                    ).add_to(m)
-        
-        # Display map
-        st_folium(m, width=700, height=500)
+    # Add HCHO hotspots
+    if layers.get("HCHO", True) and data.get("hotspots"):
+        hotspots = data["hotspots"]
+        for feature in hotspots.get("features", []):
+            props = feature.get("properties", {})
+            coords = feature.get("geometry", {}).get("coordinates", [0, 0])
+            if len(coords) >= 2:
+                folium.CircleMarker(
+                    location=[coords[1], coords[0]],
+                    radius=props.get("radius", 5),
+                    popup=f"""
+                    <div style="font-family: Arial; min-width: 150px;">
+                        <b>Cluster {props.get('cluster_id', 'Unknown')}</b><br>
+                        <hr>
+                        <b>Cells:</b> {props.get('num_cells', 0)}<br>
+                        <b>Mean HCHO:</b> {props.get('mean_hcho', 0):.4f} mol/m²<br>
+                        <b>Max HCHO:</b> {props.get('max_hcho', 0):.4f} mol/m²<br>
+                        <b>Source:</b> {props.get('source_region', 'Unknown')}
+                    </div>
+                    """,
+                    color=props.get("color", "#FF6B35"),
+                    fill=True,
+                    fill_color=props.get("color", "#FF6B35"),
+                    fill_opacity=0.7
+                ).add_to(m)
     
-    with col2:
-        st.subheader("Legend")
-        st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border: 1px solid #30363D;">
-            <p><span style="color: #FF6B35;">●</span> HCHO Hotspot (High)</p>
-            <p><span style="color: #FF9800;">●</span> HCHO Hotspot (Medium)</p>
-            <p><span style="color: #FF1744;">●</span> Active Fire</p>
-            <hr style="border-color: #30363D;">
-            <p style="font-size: 12px; color: #8B949E;">Click on markers for details</p>
-        </div>
-        """, unsafe_allow_html=True)
+    # Display map
+    st_folium(m, width=700, height=500)
 
 # -----------------------------------------------------------------
 # TAB 2: Model Performance
@@ -322,7 +288,6 @@ with tab2:
     with col1:
         st.subheader("Predicted vs Actual")
         # Generate sample data for demo
-        np.random.seed(42)
         actual = np.random.randn(100) * 10 + 50
         predicted = actual + np.random.randn(100) * 5
         
@@ -349,9 +314,6 @@ with tab2:
             height=400
         )
         st.plotly_chart(fig, use_container_width=True)
-        
-        # Show metrics
-        st.caption("📊 Model: LSTM | Data: Test Set (n=100)")
     
     with col2:
         st.subheader("Feature Importance")
@@ -374,17 +336,6 @@ with tab2:
             showlegend=False
         )
         st.plotly_chart(fig, use_container_width=True)
-    
-    # Model comparison
-    st.subheader("Model Comparison")
-    comparison_df = pd.DataFrame({
-        "Model": ["Random Forest", "LSTM", "CNN-LSTM"],
-        "RMSE": [15.2, 12.4, 11.8],
-        "MAE": [10.1, 8.7, 8.2],
-        "R²": [0.82, 0.87, 0.89],
-        "MAPE": [18.5, 14.2, 13.5]
-    })
-    st.dataframe(comparison_df, use_container_width=True, hide_index=True)
 
 # -----------------------------------------------------------------
 # TAB 3: Biomass Burning
@@ -419,85 +370,33 @@ with tab3:
                     height=400
                 )
                 st.plotly_chart(fig, use_container_width=True)
-                
-                # Show source stats
-                st.caption(f"📊 Total Cells: {df['Cells'].sum()} | Total HCHO: {df['HCHO'].sum():.2f} mol/m²")
     
     with col2:
         st.subheader("Fire-HCHO Correlation")
         lags = [0, 1, 2, 3]
         correlation = [0.12, 0.34, 0.74, 0.45]
-        p_values = [0.28, 0.04, 0.001, 0.02]
         
-        colors = ['#888' if l != 2 else '#2ECC71' for l in lags]
-        
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
+        fig = px.bar(
             x=lags,
             y=correlation,
-            marker_color=colors,
-            text=[f'p={p:.3f}' for p in p_values],
-            textposition='outside'
-        ))
-        fig.add_hline(y=0, line_dash='dash', line_color='gray')
-        fig.add_annotation(
-            x=2,
-            y=0.74 + 0.1,
-            text='⭐ Optimal: 2 days',
-            showarrow=True,
-            arrowhead=2,
-            arrowsize=1,
-            arrowcolor='#2ECC71'
+            labels={"x": "Lag (Days)", "y": "Correlation (r)"},
+            title="Lagged Fire-HCHO Correlation",
+            color=correlation,
+            color_continuous_scale="RdYlGn"
         )
         fig.update_layout(
             template="plotly_dark",
-            title="Lagged Fire-HCHO Correlation",
-            xaxis_title="Lag (Days)",
-            yaxis_title="Pearson Correlation (r)",
             height=400
         )
         st.plotly_chart(fig, use_container_width=True)
         
         st.success("✅ Optimal lag: 2 days (r = 0.74, p < 0.001)")
         st.info("💡 HCHO peaks 2 days after fire activity")
-    
-    # Additional insights
-    st.subheader("🔍 Key Insights")
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B35;">
-            <b>IGP Contribution</b><br>
-            <span style="font-size: 24px; color: #FF6B35;">72%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Crop burning in Punjab/Haryana</span>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF9800;">
-            <b>Central India</b><br>
-            <span style="font-size: 24px; color: #FF9800;">18%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Forest fires in MP/Chhattisgarh</span>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF1744;">
-            <b>Northeast</b><br>
-            <span style="font-size: 24px; color: #FF1744;">10%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Forest fires in NE states</span>
-        </div>
-        """, unsafe_allow_html=True)
 
 # ============================================================
 # Footer
 # ============================================================
 
 st.markdown("---")
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.caption("🌍 Built with ❤️ by Team Swachh Agam | ISRO Hackathon 2026")
-    st.caption("📡 Data sources: Sentinel-5P · ERA5 · FIRMS · CPCB")
+st.caption("🌍 Built with ❤️ by Team Swachh Agam | ISRO Hackathon 2026")
+st.caption("📡 Data sources: Sentinel-5P · ERA5 · FIRMS · CPCB")
