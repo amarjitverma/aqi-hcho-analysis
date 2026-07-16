@@ -129,7 +129,7 @@ dashboard/
 - [x] Utility modules
 - [x] Dependencies file
 
-### ⏳ Phase 2: Dashboard Home (COMPLETE)
+### ⏳ Phase 2: Dashboard Home (Starting)
 - [ ] Header with branding
 - [ ] Sidebar navigation
 - [ ] KPI cards (AQI, HCHO, Fires)
@@ -320,7 +320,7 @@ streamlit run app.py
 ## 📞 Support
 
 - **GitHub Issues**: [Report bugs](https://github.com/amarjitverma/aqi-hcho-analysis/issues)
-- **Email**: amarjitengr@gmail.com
+- **Email**: team@swachhagam.in
 - **Documentation**: [GitHub Wiki](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
 
 ---
