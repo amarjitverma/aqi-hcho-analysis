@@ -1,0 +1,151 @@
+/* ============================================================
+   Swachh Agam - Dashboard Custom Styles
+   ============================================================ */
+
+/* Main container */
+.main {
+    background-color: #0D1117;
+    color: #E6EDF3;
+}
+
+/* Metric cards */
+.stMetric {
+    background-color: #161B22;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #30363D;
+    transition: border-color 0.3s ease;
+}
+
+.stMetric:hover {
+    border-color: #58A6FF;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+    color: #F0F6FC;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    border-bottom: 2px solid #30363D;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Sidebar */
+.css-1d391kg {
+    background-color: #161B22;
+    border-right: 1px solid #30363D;
+}
+
+/* Streamlit containers */
+.st-emotion-cache-16idsys {
+    background-color: #0D1117;
+}
+
+.st-emotion-cache-1v0mbdj {
+    color: #8B949E;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #238636;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.stButton > button:hover {
+    background-color: #2EA043;
+}
+
+/* DataFrames */
+.dataframe {
+    font-size: 14px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.dataframe th {
+    background-color: #161B22;
+    color: #F0F6FC;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #30363D;
+}
+
+.dataframe td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #21262D;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: #161B22;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #8B949E;
+    font-weight: 500;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background-color: #1F6FEB;
+    color: #FFFFFF;
+}
+
+/* Code blocks */
+code {
+    background-color: #161B22;
+    color: #58A6FF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0D1117;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363D;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #484F58;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+    }
+    
+    .stMetric {
+        padding: 10px;
+    }
+}
