@@ -1,0 +1,59 @@
+# ============================================================
+# Data Configuration
+# ============================================================
+
+# Satellite data sources
+satellite:
+  sentinel5p:
+    products: ["NO2", "SO2", "CO", "O3", "HCHO"]
+    collection: "COPERNICUS/S5P/OFFL/L3_{product}"
+    band: 
+      NO2: "nitrogen_dioxide_column_number_density"
+      SO2: "sulfur_dioxide_column_number_density"
+      CO: "carbon_monoxide_column_number_density"
+      O3: "ozone_column_number_density"
+      HCHO: "tropospheric_HCHO_column_number_density"
+    scale: 0.00001
+    unit: "mol/m²"
+    quality_threshold: 0.5
+    years: 5
+    
+  modis:
+    product: "AOD"
+    collection: "MODIS/006/MOD08_D3"
+    band: "AOD_550_Dark_Target_Deep_Blue_Combined"
+    
+  viirs:
+    product: "Fires"
+    collection: "VIIRS"
+    band: "fire"
+
+# Meteorological data sources
+meteorology:
+  era5:
+    variables:
+      - "10m_u_component_of_wind"
+      - "10m_v_component_of_wind"
+      - "2m_temperature"
+      - "2m_dewpoint_temperature"
+      - "boundary_layer_height"
+    resolution: 0.25
+    frequency: "hourly"
+
+# Ground data sources
+ground:
+  cpcb:
+    parameters: ["pm25", "pm10", "no2", "so2", "co", "o3"]
+    cities: ["Delhi", "Mumbai", "Kolkata", "Bengaluru", "Chennai"]
+    
+  openaq:
+    parameters: ["pm25", "pm10", "no2", "so2", "co", "o3"]
+    limit: 1000
+
+# Grid
+grid:
+  resolution: 0.25
+  lat_min: 8
+  lat_max: 38
+  lon_min: 68
+  lon_max: 98

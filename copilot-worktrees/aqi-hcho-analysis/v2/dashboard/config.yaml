@@ -1,0 +1,136 @@
+# ============================================================
+# Swachh Agam Dashboard - Configuration
+# ============================================================
+
+app:
+  name: "Swachh Agam - Air Quality Dashboard"
+  description: "Satellite-based AQI Prediction & HCHO Hotspot Analysis"
+  version: "1.0.0"
+  team: "Swachh Agam (ISRO Hackathon 2026)"
+
+map:
+  center_lat: 23.1815
+  center_lon: 79.9864
+  default_zoom: 5
+  max_zoom: 18
+  min_zoom: 3
+  tile_provider: "OpenStreetMap"
+
+colors:
+  primary: "#0066CC"
+  secondary: "#FF6B6B"
+  accent: "#4ECDC4"
+  success: "#2ECC71"
+  warning: "#F39C12"
+  danger: "#E74C3C"
+  dark: "#2C3E50"
+  light: "#ECF0F1"
+
+aqi_categories:
+  0-50:
+    label: "Good"
+    color: "#2ECC71"
+    bg_color: "#D5F4E6"
+    description: "Air quality is satisfactory, and air pollution poses little or no risk"
+  
+  51-100:
+    label: "Satisfactory"
+    color: "#F39C12"
+    bg_color: "#FEF5E7"
+    description: "Air quality is acceptable. However, there may be risk for some people"
+  
+  101-200:
+    label: "Moderately Polluted"
+    color: "#E67E22"
+    bg_color: "#FDF2E9"
+    description: "Members of sensitive groups (children, elderly, people with lung/heart disease) may experience health effects"
+  
+  201-300:
+    label: "Poor"
+    color: "#E74C3C"
+    bg_color: "#FADBD8"
+    description: "Some members of general public may begin to experience health effects"
+  
+  301-400:
+    label: "Very Poor"
+    color: "#8E44AD"
+    bg_color: "#EBDEF0"
+    description: "Serious effects among general public. Person with lung/heart disease may be in critical condition"
+  
+  401+:
+    label: "Hazardous"
+    color: "#C0392B"
+    bg_color: "#F5B7B1"
+    description: "Respiratory/Heart patients should stay indoors and reduce physical activity. Healthy people also suffer"
+
+data:
+  refresh_interval_hours: 6
+  cache_dir: "./cache"
+  processed_data_path: "../data/processed"
+  features_path: "../data/features"
+
+alerts:
+  aqi_poor_threshold: 200
+  aqi_hazardous_threshold: 400
+  hcho_high_threshold: 15.0
+  fire_spike_threshold: 100
+
+models:
+  default_model: "xgboost"
+  model_dir: "../models"
+  show_model_comparison: true
+  enable_shap: true
+
+pages:
+  dashboard:
+    name: "🏠 Dashboard"
+    icon: "📊"
+  
+  map_view:
+    name: "🗺️ Map View"
+    icon: "🌍"
+  
+  model_performance:
+    name: "📊 Model Performance"
+    icon: "📈"
+  
+  biomass_burning:
+    name: "🔥 Biomass Burning"
+    icon: "🔥"
+  
+  export_share:
+    name: "📥 Export & Share"
+    icon: "📤"
+  
+  alerts:
+    name: "🔔 Alerts"
+    icon: "🔔"
+  
+  reports:
+    name: "📄 Reports"
+    icon: "📋"
+  
+  data_sources:
+    name: "🗂️ Data Sources"
+    icon: "🗃️"
+  
+  admin_panel:
+    name: "⚙️ Admin Panel"
+    icon: "⚙️"
+  
+  help_support:
+    name: "❓ Help & Support"
+    icon: "❔"
+
+ui:
+  theme: "light"
+  font_family: "sans-serif"
+  card_border_radius: "8px"
+  sidebar_width: "280px"
+  page_padding: "2rem"
+
+performance:
+  max_page_load_seconds: 3
+  map_interaction_ms: 500
+  enable_caching: true
+  cache_ttl_hours: 24
