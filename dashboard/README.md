@@ -320,7 +320,7 @@ streamlit run app.py
 ## 📞 Support
 
 - **GitHub Issues**: [Report bugs](https://github.com/amarjitverma/aqi-hcho-analysis/issues)
-- **Email**: team@swachhagam.in
+- **Email**: amarjitengr@gmail.com
 - **Documentation**: [GitHub Wiki](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
 
 ---
