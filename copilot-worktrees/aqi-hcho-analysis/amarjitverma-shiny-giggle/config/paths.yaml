@@ -1,0 +1,57 @@
+# ============================================================
+# Path Configuration
+# ============================================================
+
+# Data paths
+data:
+  raw: "data/raw"
+  interim: "data/interim"
+  processed: "data/processed"
+  features: "data/features"
+  metadata: "data/metadata"
+  external: "data/external"
+
+# Source code paths
+src:
+  acquisition: "src/acquisition"
+  preprocessing: "src/preprocessing"
+  features: "src/features"
+  gis: "src/gis"
+  models: "src/models"
+  training: "src/training"
+  evaluation: "src/evaluation"
+  analysis: "src/analysis"
+  visualization: "src/visualization"
+  utils: "src/utils"
+
+# Dashboard paths
+dashboard:
+  root: "dashboard"
+  pages: "dashboard/pages"
+  components: "dashboard/components"
+  assets: "dashboard/assets"
+  cache: "dashboard/cache"
+
+# Output paths
+outputs:
+  models: "outputs/models"
+  predictions: "outputs/predictions"
+  figures: "outputs/figures"
+  maps: "outputs/maps"
+  reports: "outputs/reports"
+  metrics: "outputs/metrics"
+
+# Model checkpoints
+models:
+  checkpoints: "models/checkpoints"
+
+# Runtime paths
+runtime:
+  logs: "runtime/logs"
+  cache: "runtime/cache"
+  temp: "runtime/temp"
+
+# Documentation paths
+docs: "docs"
+tests: "tests"
+scripts: "scripts"
