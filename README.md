@@ -129,7 +129,9 @@ streamlit run dashboard/app.py
 
 **Team Swachh Agam**
 
-- **Amarjit Verma** — Team Lead, Integration & QA Expert
+The Team comprises four students pursuing their BS in Data Science and Applications from IIT Madras, working together to build a comprehensive air quality monitoring and analysis platform for the ISRO Hackathon.
+
+- **Amarjit Verma** — Team Lead, Integration & QA
 - **Siddharth Yadav** — Satellite Data & Preprocessing
 - **Anurag Kumar** — HCHO & Fire Analysis
 - **Ravi Kumar** — Dashboard & Visualization
