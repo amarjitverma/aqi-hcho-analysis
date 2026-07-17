@@ -77,13 +77,14 @@ def download_era5(
         client.retrieve(
             "reanalysis-era5-single-levels",
             {
-                "product_type": "reanalysis",
-                "format": "netcdf",
+                "product_type": ["reanalysis"],
                 "variable": variables,
                 "year": years_list,
                 "month": months_list,
                 "day": days_list,
                 "time": ["00:00", "06:00", "12:00", "18:00"],
+                "data_format": "netcdf",
+                "download_format": "unarchived",
                 "area": area,
             },
             output_path,
