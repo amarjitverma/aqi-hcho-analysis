@@ -36,8 +36,8 @@ def create_sequences(
         X.append(data[i : i + seq_length])
         y.append(target[i + seq_length])
 
-    X = np.array(X)
-    y = np.array(y)
+    X = np.array(X, dtype=np.float32)
+    y = np.array(y, dtype=np.float32)
 
     logger.info(f"  Created {len(X)} sequences")
     logger.info(f"  X shape: {X.shape}, y shape: {y.shape}")

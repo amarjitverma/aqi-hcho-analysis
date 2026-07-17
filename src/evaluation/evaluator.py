@@ -104,8 +104,16 @@ class Evaluator:
     def save_metrics(self, model_name: str, metrics: Dict[str, float]) -> None:
         """Save metrics to JSON file."""
         filepath = self.output_dir / f"{model_name}_metrics.json"
+        # Convert numpy scalar types to native Python floats for JSON serialization
+        serializable_metrics = {}
+        for k, v in metrics.items():
+            if isinstance(v, (np.float32, np.float64, np.int32, np.int64)):
+                serializable_metrics[k] = float(v)
+            else:
+                serializable_metrics[k] = v
         with open(filepath, "w") as f:
-            json.dump(metrics, f, indent=2)
+            json.dump(serializable_metrics, f, indent=2)
+
         logger.info(f"💾 Metrics saved to {filepath}")
 
     def load_metrics(self, model_name: str) -> Dict[str, float]:

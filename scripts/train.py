@@ -31,7 +31,7 @@ def main():
                        choices=["lstm", "cnn_lstm", "convlstm", "transformer"],
                        help="Model to train")
     parser.add_argument("--epochs", type=int, default=100, help="Number of epochs")
-    parser.add_argument("--batch-size", type=int, default=32, help="Batch size")
+    parser.add_argument("--batch-size", type=int, default=16, help="Batch size")
     parser.add_argument("--data-dir", type=str, default="data/processed", help="Data directory")
     parser.add_argument("--output-dir", type=str, default="outputs", help="Output directory")
     parser.add_argument("--skip-training", action="store_true", help="Skip training (load existing model)")

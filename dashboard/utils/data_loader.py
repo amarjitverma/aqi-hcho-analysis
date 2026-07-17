@@ -130,7 +130,8 @@ def load_fire_data(date=None):
                     'lat': df_real['latitude'],
                     'lon': df_real['longitude'],
                     'intensity': df_real['frp'],
-                    'detected_time': df_real['acq_time'].astype(str) + " UTC"
+                    'detected_time': df_real['acq_time'].astype(str) + " UTC",
+                    'date': df_real['acq_date']
                 })
                 logger.info(f"Loaded all {len(df_out)} real fire hotspots from downloaded CSVs")
                 return df_out
