@@ -1,69 +1,78 @@
-"""
-Model Performance Page - ML Metrics and Explainability
-"""
+# ============================================================
+# Dashboard Page: Model Performance
+# ============================================================
+
+"""Model performance page for the dashboard."""
 
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import json
+import numpy as np
+from pathlib import Path
 
-st.title("📊 Model Performance")
-st.markdown("---")
 
-st.markdown("""
-## Machine Learning Model Metrics
+def render():
+    """Render the Model Performance page."""
+    st.header("📊 Model Performance Analysis")
+    st.caption("Evaluate the accuracy and reliability of our predictions")
+    
+    # Load metrics
+    metrics = {}
+    try:
+        with open('outputs/metrics/rf_metrics.json', 'r') as f:
+            metrics['Random Forest'] = json.load(f)
+    except:
+        pass
+    
+    try:
+        with open('outputs/metrics/lstm_metrics.json', 'r') as f:
+            metrics['LSTM'] = json.load(f)
+    except:
+        pass
+    
+    try:
+        with open('outputs/metrics/cnn_lstm_metrics.json', 'r') as f:
+            metrics['CNN-LSTM'] = json.load(f)
+    except:
+        pass
+    
+    if not metrics:
+        st.warning("No model metrics found. Run the training pipeline first.")
+        return
+    
+    # Display metrics
+    st.subheader("Model Comparison")
+    
+    # Create comparison table
+    df = pd.DataFrame(metrics).T
+    df = df.round(3)
+    
+    st.dataframe(df.style.apply(lambda x: ['background-color: #1B5E20; color: white' if v == x.min() else '' for v in x]))
+    
+    # Performance gauges
+    st.subheader("Performance Gauges")
+    
+    # Get best model
+    if 'LSTM' in metrics:
+        best_model = metrics['LSTM']
+    elif 'CNN-LSTM' in metrics:
+        best_model = metrics['CNN-LSTM']
+    else:
+        best_model = metrics['Random Forest']
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("RMSE", f"{best_model.get('rmse', 0):.2f} µg/m³")
+    with col2:
+        st.metric("MAE", f"{best_model.get('mae', 0):.2f} µg/m³")
+    with col3:
+        st.metric("R²", f"{best_model.get('r2', 0):.3f}")
+    with col4:
+        st.metric("MAPE", f"{best_model.get('mape', 0):.1f}%")
 
-This page will display:
-- 📈 Model evaluation metrics (RMSE, MAE, R², MAPE)
-- 🔄 Model comparison table
-- 📊 Predicted vs Actual scatter plot
-- 🎯 Feature importance chart
-- 🧠 SHAP explainability plots
-- ⏰ Last updated timestamp
 
-**Models Compared:**
-- XGBoost (Primary)
-- Random Forest
-- LSTM
-- CNN-LSTM
-- ConvLSTM
-- Transformer
-
-**Status**: 🔨 Under Development (Phase 4)
-""")
-
-st.info("📋 Full implementation coming in Phase 4 (Days 8-10)")
-
-# Placeholder for metrics cards
-st.subheader("Metric Cards Preview")
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.metric("RMSE", "12.4 µg/m³", "Good")
-
-with col2:
-    st.metric("MAE", "8.7 µg/m³", "Good")
-
-with col3:
-    st.metric("R²", "0.87", "Good")
-
-with col4:
-    st.metric("MAPE", "14.2%", "Good")
-
-# Model Comparison Table
-st.markdown("---")
-st.subheader("Model Comparison")
-st.warning("Comparison table placeholder")
-
-# Charts
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("#### 📊 Predicted vs Actual")
-    st.warning("Scatter plot placeholder")
-
-with col2:
-    st.markdown("#### 🎯 Feature Importance")
-    st.warning("Bar chart placeholder")
-
-# SHAP
-st.markdown("---")
-st.subheader("Model Explanation (SHAP)")
-st.warning("SHAP summary plot placeholder")
+if __name__ == "__main__":
+    render()
