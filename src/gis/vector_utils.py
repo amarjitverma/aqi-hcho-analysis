@@ -6,6 +6,7 @@
 
 import json
 import geopandas as gpd
+import numpy as np
 from shapely.geometry import Point, Polygon
 from loguru import logger
 
