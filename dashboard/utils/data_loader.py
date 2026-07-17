@@ -72,35 +72,70 @@ def load_fire_data(date=None):
     Returns:
         DataFrame with columns: lat, lon, intensity, detected_time
     """
-    # Try loading real downloaded data
-    real_data_path = Path("data/raw/satellite/viirs/fires/fires_2023-01-01_2023-12-31.csv")
-    if real_data_path.exists():
+    # Try loading all downloaded real data files in the fires directory
+    fire_dir = Path("data/raw/satellite/viirs/fires/")
+    df_list = []
+    covered_ranges = []
+    if fire_dir.exists():
+        for csv_path in fire_dir.glob("fires_*.csv"):
+            try:
+                # Parse range from filename: fires_YYYY-MM-DD_YYYY-MM-DD.csv
+                parts = csv_path.stem.split('_')
+                if len(parts) == 3:
+                    start_t = pd.to_datetime(parts[1]).date()
+                    end_t = pd.to_datetime(parts[2]).date()
+                    covered_ranges.append((start_t, end_t))
+                
+                df_real = pd.read_csv(csv_path)
+                df_list.append(df_real)
+            except Exception:
+                pass
+                
+    if df_list:
         try:
-            df_real = pd.read_csv(real_data_path)
+            df_real = pd.concat(df_list, ignore_index=True)
             
             # Filter by date if specified
             if date is not None:
-                # Convert date to YYYY-MM-DD string
+                # Convert date to date object and string
                 if isinstance(date, str):
                     date_str = date.split(' ')[0]
+                    date_obj = pd.to_datetime(date_str).date()
                 else:
                     date_str = date.strftime('%Y-%m-%d')
-                df_filtered = df_real[df_real['acq_date'] == date_str]
-            else:
-                df_filtered = df_real
+                    date_obj = date
+                    if isinstance(date_obj, datetime):
+                        date_obj = date_obj.date()
                 
-            if not df_filtered.empty:
-                # Map to target columns: lat, lon, intensity, detected_time
+                # Check if the requested date is covered by any downloaded file range
+                is_date_covered = False
+                for start_t, end_t in covered_ranges:
+                    if start_t <= date_obj <= end_t:
+                        is_date_covered = True
+                        break
+                
+                if is_date_covered:
+                    df_filtered = df_real[df_real['acq_date'] == date_str]
+                    df_out = pd.DataFrame({
+                        'lat': df_filtered['latitude'] if not df_filtered.empty else pd.Series(dtype=float),
+                        'lon': df_filtered['longitude'] if not df_filtered.empty else pd.Series(dtype=float),
+                        'intensity': df_filtered['frp'] if not df_filtered.empty else pd.Series(dtype=float),
+                        'detected_time': (df_filtered['acq_time'].astype(str) + " UTC") if not df_filtered.empty else pd.Series(dtype=str)
+                    })
+                    logger.info(f"Loaded {len(df_out)} real fire hotspots (covered date range) for date {date}")
+                    return df_out
+            else:
+                # Map all real data
                 df_out = pd.DataFrame({
-                    'lat': df_filtered['latitude'],
-                    'lon': df_filtered['longitude'],
-                    'intensity': df_filtered['frp'],
-                    'detected_time': df_filtered['acq_time'].astype(str) + " UTC"
+                    'lat': df_real['latitude'],
+                    'lon': df_real['longitude'],
+                    'intensity': df_real['frp'],
+                    'detected_time': df_real['acq_time'].astype(str) + " UTC"
                 })
-                logger.info(f"Loaded {len(df_out)} real fire hotspots from {real_data_path} for date {date}")
+                logger.info(f"Loaded all {len(df_out)} real fire hotspots from downloaded CSVs")
                 return df_out
         except Exception as e:
-            logger.warning(f"Failed to read real fire data CSV: {e}. Falling back to mock data.")
+            logger.warning(f"Failed to read real fire data CSVs: {e}. Falling back to mock data.")
 
     # Fire hotspot regions in India
     fire_regions = [
@@ -138,6 +173,73 @@ def load_hcho_data(date=None):
     Returns:
         DataFrame with columns: lat, lon, concentration, status
     """
+    # Try loading real downloaded HCHO tif files
+    hcho_dir = Path("data/raw/satellite/sentinel5p/hcho/")
+    if hcho_dir.exists():
+        try:
+            import rasterio
+            for tif_path in hcho_dir.glob("HCHO_*.tif"):
+                # Parse date range from filename: HCHO_YYYY-MM-DD_YYYY-MM-DD.tif
+                parts = tif_path.stem.split('_')
+                if len(parts) == 3:
+                    start_t = pd.to_datetime(parts[1]).date()
+                    end_t = pd.to_datetime(parts[2]).date()
+                    
+                    # Convert query date to date object
+                    query_date = None
+                    if date is not None:
+                        if isinstance(date, str):
+                            query_date = pd.to_datetime(date.split(' ')[0]).date()
+                        else:
+                            query_date = date
+                            if isinstance(query_date, datetime):
+                                query_date = query_date.date()
+                                
+                    # If date matches range or date is None (load latest)
+                    if date is None or (query_date is not None and start_t <= query_date <= end_t):
+                        with rasterio.open(tif_path) as src:
+                            band1 = src.read(1)
+                            # Replace nodata with NaN
+                            if src.nodata is not None:
+                                band1[band1 == src.nodata] = np.nan
+                            
+                            # Find valid coordinates and values
+                            valid_mask = ~np.isnan(band1) & (band1 > 0)
+                            rows, cols = np.where(valid_mask)
+                            
+                            if len(rows) > 0:
+                                values = band1[valid_mask]
+                                
+                                # Subsample to prevent dashboard map from lagging/crashing (max 500 points)
+                                if len(rows) > 500:
+                                    # Take top 500 highest values (hotspots!)
+                                    idx = np.argsort(values)[-500:]
+                                    rows = rows[idx]
+                                    cols = cols[idx]
+                                    values = values[idx]
+                                    
+                                lons, lats = src.xy(rows, cols)
+                                
+                                # Scale values to match mock scale (e.g. 5 to 25 ppb for HCHO)
+                                max_val = values.max() if values.max() > 0 else 1
+                                concentrations = 5 + (values / max_val) * 20
+                                
+                                statuses = []
+                                for conc in concentrations:
+                                    status = 'High' if conc > 15 else ('Medium' if conc > 10 else 'Low')
+                                    statuses.append(status)
+                                    
+                                df_out = pd.DataFrame({
+                                    'lat': lats,
+                                    'lon': lons,
+                                    'concentration': concentrations,
+                                    'status': statuses
+                                })
+                                logger.info(f"Loaded {len(df_out)} real HCHO hotspots from {tif_path.name} for date {date}")
+                                return df_out
+        except Exception as e:
+            logger.warning(f"Failed to read real HCHO TIF file: {e}. Falling back to mock data.")
+
     # HCHO hotspot regions (typically near industrial areas and biomass burning)
     hcho_regions = [
         {'lat': 28.7, 'lon': 77.1},   # Delhi-NCR

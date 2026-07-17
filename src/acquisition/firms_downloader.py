@@ -44,8 +44,17 @@ def download_firms(
     # India bounding box
     bbox = "68.0,8.0,98.0,38.0"
 
+    # Calculate range of days (max 5 allowed by FIRMS)
+    try:
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        range_days = (end_dt - start_dt).days + 1
+        range_days = max(1, min(5, range_days))
+    except Exception:
+        range_days = 1
+
     # FIRMS API URL
-    url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{api_key}/VIIRS_SNPP_SP/70.0,8.0,100.0,40.0/1/{start_date}"
+    url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{api_key}/VIIRS_SNPP_SP/70.0,8.0,100.0,40.0/{range_days}/{start_date}"
 
     try:
         response = requests.get(url, timeout=30)
