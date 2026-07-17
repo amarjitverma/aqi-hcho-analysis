@@ -8,6 +8,7 @@ Downloads ERA5 reanalysis data from Copernicus CDS API.
 
 import os
 import cdsapi
+import pandas as pd
 from dotenv import load_dotenv
 from loguru import logger
 
@@ -50,6 +51,20 @@ def download_era5(
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, f"era5_{start_date}_{end_date}.nc")
 
+    # Parse start and end date to determine specific years, months, and days
+    try:
+        start_dt = pd.to_datetime(start_date)
+        end_dt = pd.to_datetime(end_date)
+        date_range = pd.date_range(start_dt, end_dt)
+        years_list = sorted(list(set(date_range.strftime("%Y"))))
+        months_list = sorted(list(set(date_range.strftime("%m"))))
+        days_list = sorted(list(set(date_range.strftime("%d"))))
+    except Exception as e:
+        logger.warning(f"Failed to parse dates {start_date} - {end_date}: {e}. Defaulting to range.")
+        years_list = [str(y) for y in range(2019, 2024)]
+        months_list = [str(m).zfill(2) for m in range(1, 13)]
+        days_list = [str(d).zfill(2) for d in range(1, 32)]
+
     # Download via CDS API
     try:
         # Initialize CDS client with environment variables if available
@@ -65,9 +80,9 @@ def download_era5(
                 "product_type": "reanalysis",
                 "format": "netcdf",
                 "variable": variables,
-                "year": [str(y) for y in range(2019, 2024)],
-                "month": [str(m).zfill(2) for m in range(1, 13)],
-                "day": [str(d).zfill(2) for d in range(1, 32)],
+                "year": years_list,
+                "month": months_list,
+                "day": days_list,
                 "time": ["00:00", "06:00", "12:00", "18:00"],
                 "area": area,
             },
