@@ -86,7 +86,7 @@ class HCHOHotspotDetector:
         """Process DBSCAN results into cluster dictionaries."""
         clusters = {}
         unique_labels = set(labels) - {-1}
-        colors = ["#6D28D9", "#8B5CF6", "#A78BFA", "#4F46E5", "#6366F1", "#818CF8"]
+        colors = ["#6D28D9", "#F59E0B", "#A78BFA", "#4F46E5", "#6366F1", "#818CF8"]
 
         for idx, label in enumerate(unique_labels):
             mask = labels == label

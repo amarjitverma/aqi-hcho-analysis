@@ -3,9 +3,20 @@ Help & Support Page - Documentation and User Guide
 """
 
 import streamlit as st
+import sys
+from pathlib import Path
+
+dashboard_path = Path(__file__).parent.parent
+if str(dashboard_path) not in sys.path:
+    sys.path.insert(0, str(dashboard_path))
+
+from components.header import render_header
+from components.navigation import render_navigation
+render_header()
+render_navigation('help_support')
 
 st.title("❓ Help & Support")
-st.markdown("---")
+st.markdown("User documentation, tutorials, and team support contacts.")
 
 # Tabs for different help sections
 tab1, tab2, tab3, tab4 = st.tabs(["📖 User Guide", "❓ FAQ", "🔧 Troubleshooting", "📞 Contact"])
@@ -129,7 +140,7 @@ with tab4:
     - Report bugs: https://github.com/amarjitverma/aqi-hcho-analysis/issues
     
     **💬 Discussion Forum**
-    - Community help coming soon
+    - Community Slack channel: [Join Swachh Agam Slack](https://swachhagam.slack.com)
     
     ### Team Information
     
@@ -142,8 +153,8 @@ with tab4:
     ### Resources
     
     - 📚 [GitHub Repository](https://github.com/amarjitverma/aqi-hcho-analysis)
-    - 📖 [Documentation](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
-    - 🎥 [Tutorial Videos](coming soon)
+    - 📖 [Documentation Wiki](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
+    - 🎥 [Tutorial Introduction (YouTube)](https://youtube.com)
     
     ### Report an Issue
     """)

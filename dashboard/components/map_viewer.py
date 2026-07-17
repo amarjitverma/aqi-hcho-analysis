@@ -107,7 +107,7 @@ def add_hcho_markers(map_obj, hcho_data):
                 color = '#6D28D9'  # Deep Purple - High
                 status = 'High'
             elif conc > 10:
-                color = '#8B5CF6'  # Medium Purple - Medium
+                color = '#F59E0B'  # Amber Yellow - Medium
                 status = 'Medium'
             else:
                 color = '#A78BFA'  # Light Purple - Low

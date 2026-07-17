@@ -17,6 +17,13 @@ from streamlit_folium import st_folium
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
+import sys
+dashboard_path = Path(__file__).parent
+if str(dashboard_path) not in sys.path:
+    sys.path.insert(0, str(dashboard_path))
+
+from components.header import render_header
+from components.navigation import render_navigation
 
 # ============================================================
 # Page Configuration
@@ -182,7 +189,7 @@ def generate_demo_data():
                     "mean_hcho": 15.2,
                     "max_hcho": 22.0,
                     "source_region": "Central India (Forest Fires)",
-                    "color": "#8B5CF6",
+                    "color": "#F59E0B",
                     "radius": 4
                 }
             },
@@ -241,6 +248,9 @@ if not any(data.values()):
 # ============================================================
 # Main Content
 # ============================================================
+
+render_header()
+render_navigation('dashboard')
 
 st.title("🌍 Air Quality Dashboard - India")
 st.markdown("*Satellite-based Surface AQI & HCHO Hotspot Analysis Platform*")
@@ -335,7 +345,7 @@ with tab1:
         st.markdown("""
         <div style="background-color: #FFFFFF; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #6D28D9;">●</span> HCHO Hotspot (High)</p>
-            <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #8B5CF6;">●</span> HCHO Hotspot (Medium)</p>
+            <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #F59E0B;">●</span> HCHO Hotspot (Medium)</p>
             <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #EF4444;">●</span> Active Fire</p>
             <hr style="border-color: #E2E8F0; margin: 10px 0;">
             <p style="font-size: 12px; color: #57606A; margin: 0;">Click on markers for details</p>

@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.209,
+          28.6139
+        ]
+      },
+      "properties": {
+        "cluster_id": 0,
+        "num_cells": 45,
+        "mean_hcho": 18.4,
+        "max_hcho": 25.6,
+        "source_region": "IGP (Crop Burning)",
+        "color": "#6D28D9",
+        "radius": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.0,
+          22.0
+        ]
+      },
+      "properties": {
+        "cluster_id": 1,
+        "num_cells": 28,
+        "mean_hcho": 15.2,
+        "max_hcho": 22.0,
+        "source_region": "Central India (Forest Fires)",
+        "color": "#F59E0B",
+        "radius": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.0,
+          26.0
+        ]
+      },
+      "properties": {
+        "cluster_id": 2,
+        "num_cells": 17,
+        "mean_hcho": 16.8,
+        "max_hcho": 20.5,
+        "source_region": "Northeast India (Forest Fires)",
+        "color": "#A78BFA",
+        "radius": 3
+      }
+    }
+  ]
+}

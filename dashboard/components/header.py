@@ -41,11 +41,11 @@ def render_header():
     with col4:
         col_a, col_b, col_c = st.columns(3, gap="small")
         with col_a:
-            st.button("🔔", key="header_notifications", help="Notifications (2)", use_container_width=True)
+            st.markdown('<a href="/Alerts" target="_self" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 38px; background-color: #FFFFFF; color: #1F2328; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 1.1rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;">🔔</a>', unsafe_allow_html=True)
         with col_b:
-            st.button("📊", key="header_export", help="Export", use_container_width=True)
+            st.markdown('<a href="/Export_Share" target="_self" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 38px; background-color: #FFFFFF; color: #1F2328; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 1.1rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;">📊</a>', unsafe_allow_html=True)
         with col_c:
-            st.button("⚙️", key="header_settings", help="Settings", use_container_width=True)
+            st.markdown('<a href="/Admin_Panel" target="_self" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 38px; background-color: #FFFFFF; color: #1F2328; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 1.1rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;">⚙️</a>', unsafe_allow_html=True)
     
     # Last updated timestamp
     st.markdown(f"""
