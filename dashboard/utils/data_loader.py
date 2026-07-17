@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from datetime import datetime, timedelta
+from loguru import logger
 
 @st.cache_data(ttl=3600)
 def load_aqi_data(date=None):
@@ -63,14 +64,44 @@ def load_aqi_data(date=None):
 
 @st.cache_data(ttl=3600)
 def load_fire_data(date=None):
-    """Load fire detection data with intensity values
+    """Load active fire data from satellite sensors
     
     Args:
         date: Specific date to load (optional)
-    
+        
     Returns:
         DataFrame with columns: lat, lon, intensity, detected_time
     """
+    # Try loading real downloaded data
+    real_data_path = Path("data/raw/satellite/viirs/fires/fires_2023-01-01_2023-12-31.csv")
+    if real_data_path.exists():
+        try:
+            df_real = pd.read_csv(real_data_path)
+            
+            # Filter by date if specified
+            if date is not None:
+                # Convert date to YYYY-MM-DD string
+                if isinstance(date, str):
+                    date_str = date.split(' ')[0]
+                else:
+                    date_str = date.strftime('%Y-%m-%d')
+                df_filtered = df_real[df_real['acq_date'] == date_str]
+            else:
+                df_filtered = df_real
+                
+            if not df_filtered.empty:
+                # Map to target columns: lat, lon, intensity, detected_time
+                df_out = pd.DataFrame({
+                    'lat': df_filtered['latitude'],
+                    'lon': df_filtered['longitude'],
+                    'intensity': df_filtered['frp'],
+                    'detected_time': df_filtered['acq_time'].astype(str) + " UTC"
+                })
+                logger.info(f"Loaded {len(df_out)} real fire hotspots from {real_data_path} for date {date}")
+                return df_out
+        except Exception as e:
+            logger.warning(f"Failed to read real fire data CSV: {e}. Falling back to mock data.")
+
     # Fire hotspot regions in India
     fire_regions = [
         {'lat': 23.5, 'lon': 77.0},   # Madhya Pradesh
