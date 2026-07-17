@@ -3,10 +3,18 @@ Alerts Page - Real-time Notifications
 """
 
 import streamlit as st
-from datetime import datetime, timedelta
+import sys
+from pathlib import Path
+dashboard_path = Path(__file__).parent.parent
+if str(dashboard_path) not in sys.path:
+    sys.path.insert(0, str(dashboard_path))
+
+from components.header import render_header
+from components.navigation import render_navigation
+render_header()
+render_navigation('alerts')
 
 st.title("🔔 Alerts")
-st.markdown("---")
 
 st.markdown("""
 ## Real-time Alert System

@@ -1,72 +1,99 @@
 /* ============================================================
-   Swachh Agam - Dashboard Custom Styles
+   Swachh Agam - Dashboard Custom Styles (Premium Light Theme)
    ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global Reset */
+html, body, [data-testid="stAppViewContainer"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #F8F9FA;
+    color: #1F2328;
+}
 
 /* Main container */
 .main {
-    background-color: #0D1117;
-    color: #E6EDF3;
+    background-color: #F8F9FA;
+    color: #1F2328;
 }
 
 /* Metric cards */
 .stMetric {
-    background-color: #161B22;
-    border-radius: 10px;
-    padding: 15px;
-    border: 1px solid #30363D;
-    transition: border-color 0.3s ease;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stMetric:hover {
-    border-color: #58A6FF;
+    border-color: #0066CC;
+    box-shadow: 0 10px 15px -3px rgba(0, 102, 204, 0.08), 0 4px 6px -2px rgba(0, 102, 204, 0.04);
+    transform: translateY(-2px);
 }
 
 /* Headers */
 h1, h2, h3, h4, h5, h6 {
-    color: #F0F6FC;
+    color: #1F2328;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 600;
 }
 
 h1 {
     font-size: 2.2rem;
     font-weight: 700;
+    color: #0066CC;
+    letter-spacing: -0.025em;
 }
 
 h2 {
     font-size: 1.8rem;
     font-weight: 600;
-    border-bottom: 2px solid #30363D;
-    padding-bottom: 10px;
+    border-bottom: 2px solid #E2E8F0;
+    padding-bottom: 8px;
     margin-bottom: 20px;
+    letter-spacing: -0.021em;
 }
 
 /* Sidebar */
-.css-1d391kg {
-    background-color: #161B22;
-    border-right: 1px solid #30363D;
+section[data-testid="stSidebar"] {
+    background-color: #FFFFFF;
+    border-right: 1px solid #E2E8F0;
 }
 
 /* Streamlit containers */
 .st-emotion-cache-16idsys {
-    background-color: #0D1117;
+    background-color: #F8F9FA;
 }
 
 .st-emotion-cache-1v0mbdj {
-    color: #8B949E;
+    color: #475569;
 }
 
 /* Buttons */
 .stButton > button {
-    background-color: #238636;
+    background-color: #0066CC;
     color: #FFFFFF;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
+    border: 1px solid #005bb7;
+    border-radius: 8px;
+    padding: 10px 20px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
 }
 
 .stButton > button:hover {
-    background-color: #2EA043;
+    background-color: #005bb7;
+    border-color: #004b99;
+    color: #FFFFFF;
+    box-shadow: 0 4px 6px -1px rgba(0, 102, 204, 0.12), 0 2px 4px -1px rgba(0, 102, 204, 0.08);
+    transform: translateY(-1px);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
 }
 
 /* DataFrames */
@@ -74,46 +101,67 @@ h2 {
     font-size: 14px;
     border-collapse: collapse;
     width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
 }
 
 .dataframe th {
-    background-color: #161B22;
-    color: #F0F6FC;
-    padding: 10px;
+    background-color: #F8FAFC;
+    color: #1E293B;
+    padding: 12px;
     text-align: left;
-    border-bottom: 2px solid #30363D;
+    border-bottom: 2px solid #E2E8F0;
+    font-weight: 600;
 }
 
 .dataframe td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #21262D;
+    padding: 10px 12px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
 }
 
 /* Tabs */
 .stTabs [data-baseweb="tab-list"] {
     gap: 8px;
+    border-bottom: 1px solid #E2E8F0;
 }
 
 .stTabs [data-baseweb="tab"] {
-    background-color: #161B22;
-    border-radius: 6px;
-    padding: 8px 16px;
-    color: #8B949E;
+    background-color: #F1F5F9;
+    border-radius: 8px 8px 0 0;
+    padding: 10px 20px;
+    color: #475569;
     font-weight: 500;
+    border: 1px solid #E2E8F0;
+    border-bottom: none;
+    transition: all 0.2s ease;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    color: #0066CC;
+    background-color: #E2E8F0;
 }
 
 .stTabs [data-baseweb="tab"][aria-selected="true"] {
-    background-color: #1F6FEB;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #0066CC;
+    border-color: #E2E8F0;
+    border-bottom: 2px solid #FFFFFF;
+    margin-bottom: -1px;
+    font-weight: 600;
 }
 
 /* Code blocks */
 code {
-    background-color: #161B22;
-    color: #58A6FF;
-    padding: 2px 6px;
-    border-radius: 4px;
+    background-color: #F1F5F9;
+    color: #0969DA;
+    padding: 3px 8px;
+    border-radius: 6px;
     font-family: 'JetBrains Mono', monospace;
+    border: 1px solid #E2E8F0;
+    font-size: 0.9em;
 }
 
 /* Scrollbar */
@@ -123,19 +171,19 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-    background: #0D1117;
+    background: #F8F9FA;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #30363D;
+    background: #CBD5E1;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #484F58;
+    background: #94A3B8;
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
@@ -146,6 +194,6 @@ code {
     }
     
     .stMetric {
-        padding: 10px;
+        padding: 12px;
     }
 }

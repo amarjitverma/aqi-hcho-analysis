@@ -3,9 +3,18 @@ Export & Share Page - Data Download and Sharing
 """
 
 import streamlit as st
+import sys
+from pathlib import Path
+dashboard_path = Path(__file__).parent.parent
+if str(dashboard_path) not in sys.path:
+    sys.path.insert(0, str(dashboard_path))
+
+from components.header import render_header
+from components.navigation import render_navigation
+render_header()
+render_navigation('export_share')
 
 st.title("📥 Export & Share")
-st.markdown("---")
 
 st.markdown("""
 ## Download and Share Dashboard Data

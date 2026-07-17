@@ -3,7 +3,7 @@ Metrics Cards Component - KPI card displays with data visualization
 """
 
 import streamlit as st
-from dashboard.utils.chart_utils import get_aqi_color, get_aqi_label
+from utils.chart_utils import get_aqi_color, get_aqi_label
 
 def render_metric_card(title, value, delta=None, icon="", help_text="", delta_color="off"):
     """Render a single metric card with enhanced styling
@@ -50,7 +50,7 @@ def render_metrics_row(metrics):
             )
 
 def render_status_card(title, status, description, icon=""):
-    """Render a status card with color-coded indicator
+    """Render a status card with color-coded indicator and matching pastel background
     
     Args:
         title: Card title
@@ -58,30 +58,32 @@ def render_status_card(title, status, description, icon=""):
         description: Description text
         icon: Emoji icon
     """
-    # Determine color based on status
-    status_colors = {
-        'Good': '#2ECC71',
-        'Satisfactory': '#F39C12',
-        'Poor': '#E74C3C',
-        'Very Poor': '#C0392B',
-        'Hazardous': '#8E44AD',
-        'Operational': '#4CAF50',
-        'Warning': '#FF9800',
-        'Critical': '#F44336'
+    status_themes = {
+        'Good': {'color': '#2E7D32', 'bg': '#EEF9F0'},
+        'Satisfactory': {'color': '#B78103', 'bg': '#FFF8E1'},
+        'Moderate': {'color': '#A04E00', 'bg': '#FFF3E0'},
+        'Poor': {'color': '#A82216', 'bg': '#FADBD8'},
+        'Very Poor': {'color': '#5E2D87', 'bg': '#F3E5F5'},
+        'Hazardous': {'color': '#801D13', 'bg': '#FFEBEE'},
+        'Operational': {'color': '#2E7D32', 'bg': '#E8F5E9'},
+        'Warning': {'color': '#A04E00', 'bg': '#FFF3E0'},
+        'Critical': {'color': '#B71C1C', 'bg': '#FFEBEE'}
     }
     
-    color = status_colors.get(status, '#666')
+    theme = status_themes.get(status, {'color': '#57606A', 'bg': '#F6F8FA'})
+    color = theme['color']
+    bg_color = theme['bg']
     
     st.markdown(f"""
     <div style='
-        background: white;
+        background: {bg_color};
         border-left: 4px solid {color};
         padding: 1rem;
         border-radius: 6px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     '>
-        <h4 style='margin: 0; color: #333;'>{icon} {title}</h4>
+        <h4 style='margin: 0; color: #1F2328;'>{icon} {title}</h4>
         <p style='margin: 0.5rem 0 0 0; color: {color}; font-weight: bold; font-size: 1.1rem;'>{status}</p>
-        <p style='margin: 0.3rem 0 0 0; color: #666; font-size: 0.85rem;'>{description}</p>
+        <p style='margin: 0.3rem 0 0 0; color: #57606A; font-size: 0.85rem;'>{description}</p>
     </div>
     """, unsafe_allow_html=True)

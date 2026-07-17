@@ -15,6 +15,17 @@ from pathlib import Path
 
 def render():
     """Render the Model Performance page."""
+    import sys
+    from pathlib import Path
+    dashboard_path = Path(__file__).parent.parent
+    if str(dashboard_path) not in sys.path:
+        sys.path.insert(0, str(dashboard_path))
+
+    from components.header import render_header
+    from components.navigation import render_navigation
+    render_header()
+    render_navigation('model_performance')
+    
     st.header("📊 Model Performance Analysis")
     st.caption("Evaluate the accuracy and reliability of our predictions")
     

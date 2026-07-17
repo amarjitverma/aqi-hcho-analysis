@@ -35,40 +35,71 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    .main { background-color: #0D1117; }
-    .stMetric { 
-        background-color: #161B22; 
-        border-radius: 10px; 
-        padding: 10px; 
-        border: 1px solid #30363D;
-        transition: border-color 0.3s ease;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    html, body, [data-testid="stAppViewContainer"] {
+        font-family: 'Inter', -apple-system, sans-serif;
     }
-    .stMetric:hover { border-color: #58A6FF; }
-    h1, h2, h3 { color: #FFFFFF; }
-    .st-emotion-cache-1v0mbdj { color: #8B949E; }
-    .css-1d391kg { background-color: #161B22; border-right: 1px solid #30363D; }
-    .st-emotion-cache-16idsys { background-color: #0D1117; }
+    .main { background-color: #F8F9FA; color: #1F2328; }
+    .stMetric { 
+        background-color: #FFFFFF; 
+        border-radius: 12px; 
+        padding: 20px; 
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stMetric:hover { 
+        border-color: #0066CC; 
+        box-shadow: 0 10px 15px -3px rgba(0, 102, 204, 0.08), 0 4px 6px -2px rgba(0, 102, 204, 0.04);
+        transform: translateY(-2px);
+    }
+    h1, h2, h3 { 
+        color: #1F2328; 
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+    }
+    h1 { color: #0066CC; font-weight: 700; letter-spacing: -0.025em; }
+    .st-emotion-cache-1v0mbdj { color: #475569; }
+    section[data-testid="stSidebar"] { background-color: #FFFFFF; border-right: 1px solid #E2E8F0; }
+    .st-emotion-cache-16idsys { background-color: #F8F9FA; }
     .stTabs [data-baseweb="tab"] {
-        background-color: #161B22;
-        border-radius: 6px;
-        padding: 8px 16px;
-        color: #8B949E;
+        background-color: #F1F5F9;
+        border-radius: 8px 8px 0 0;
+        padding: 10px 20px;
+        color: #475569;
         font-weight: 500;
+        border: 1px solid #E2E8F0;
+        border-bottom: none;
+        transition: all 0.2s ease;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #0066CC;
+        background-color: #E2E8F0;
     }
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        background-color: #1F6FEB;
-        color: #FFFFFF;
+        background-color: #FFFFFF;
+        color: #0066CC;
+        border-color: #E2E8F0;
+        border-bottom: 2px solid #FFFFFF;
+        font-weight: 600;
     }
     .stButton > button {
-        background-color: #238636;
+        background-color: #0066CC;
         color: #FFFFFF;
-        border: none;
-        border-radius: 6px;
-        padding: 8px 16px;
+        border: 1px solid #005bb7;
+        border-radius: 8px;
+        padding: 10px 20px;
         font-weight: 500;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
     }
-    .stButton > button:hover { background-color: #2EA043; }
+    .stButton > button:hover { 
+        background-color: #005bb7; 
+        border-color: #004b99; 
+        color: #FFFFFF; 
+        box-shadow: 0 4px 6px -1px rgba(0, 102, 204, 0.12);
+        transform: translateY(-1px);
+    }
     .reportview-container .main .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
@@ -138,7 +169,7 @@ def generate_demo_data():
                     "mean_hcho": 18.4,
                     "max_hcho": 25.6,
                     "source_region": "IGP (Crop Burning)",
-                    "color": "#FF6B35",
+                    "color": "#6D28D9",
                     "radius": 5
                 }
             },
@@ -151,7 +182,7 @@ def generate_demo_data():
                     "mean_hcho": 15.2,
                     "max_hcho": 22.0,
                     "source_region": "Central India (Forest Fires)",
-                    "color": "#FF1744",
+                    "color": "#8B5CF6",
                     "radius": 4
                 }
             },
@@ -164,7 +195,7 @@ def generate_demo_data():
                     "mean_hcho": 16.8,
                     "max_hcho": 20.5,
                     "source_region": "Northeast India (Forest Fires)",
-                    "color": "#FF9800",
+                    "color": "#A78BFA",
                     "radius": 3
                 }
             }
@@ -251,7 +282,7 @@ with tab1:
         m = folium.Map(
             location=[20.5937, 78.9629],
             zoom_start=5,
-            tiles="CartoDB dark_matter",
+            tiles="CartoDB positron",
             control_scale=True
         )
         
@@ -290,9 +321,9 @@ with tab1:
                     folium.CircleMarker(
                         location=[coords[1], coords[0]],
                         radius=3,
-                        color="#FF1744",
+                        color="#EF4444",
                         fill=True,
-                        fill_color="#FF1744",
+                        fill_color="#EF4444",
                         fill_opacity=0.8
                     ).add_to(m)
         
@@ -302,12 +333,12 @@ with tab1:
     with col2:
         st.subheader("Legend")
         st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border: 1px solid #30363D;">
-            <p><span style="color: #FF6B35;">●</span> HCHO Hotspot (High)</p>
-            <p><span style="color: #FF9800;">●</span> HCHO Hotspot (Medium)</p>
-            <p><span style="color: #FF1744;">●</span> Active Fire</p>
-            <hr style="border-color: #30363D;">
-            <p style="font-size: 12px; color: #8B949E;">Click on markers for details</p>
+        <div style="background-color: #FFFFFF; padding: 15px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #6D28D9;">●</span> HCHO Hotspot (High)</p>
+            <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #8B5CF6;">●</span> HCHO Hotspot (Medium)</p>
+            <p style="margin: 0 0 8px 0; color: #1F2328;"><span style="color: #EF4444;">●</span> Active Fire</p>
+            <hr style="border-color: #E2E8F0; margin: 10px 0;">
+            <p style="font-size: 12px; color: #57606A; margin: 0;">Click on markers for details</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -344,7 +375,7 @@ with tab2:
             )
         )
         fig.update_layout(
-            template="plotly_dark",
+            template="plotly_white",
             hovermode="closest",
             height=400
         )
@@ -369,7 +400,7 @@ with tab2:
             color_continuous_scale="Viridis"
         )
         fig.update_layout(
-            template="plotly_dark",
+            template="plotly_white",
             height=400,
             showlegend=False
         )
@@ -415,7 +446,7 @@ with tab3:
                     color_discrete_sequence=px.colors.qualitative.Set3
                 )
                 fig.update_layout(
-                    template="plotly_dark",
+                    template="plotly_white",
                     height=400
                 )
                 st.plotly_chart(fig, use_container_width=True)
@@ -450,7 +481,7 @@ with tab3:
             arrowcolor='#2ECC71'
         )
         fig.update_layout(
-            template="plotly_dark",
+            template="plotly_white",
             title="Lagged Fire-HCHO Correlation",
             xaxis_title="Lag (Days)",
             yaxis_title="Pearson Correlation (r)",
@@ -467,28 +498,28 @@ with tab3:
     
     with col1:
         st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B35;">
-            <b>IGP Contribution</b><br>
-            <span style="font-size: 24px; color: #FF6B35;">72%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Crop burning in Punjab/Haryana</span>
+        <div style="background-color: #FFF3E0; padding: 15px; border-radius: 8px; border-left: 4px solid #FF6B35; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <b style="color: #1F2328;">IGP Contribution</b><br>
+            <span style="font-size: 24px; color: #FF6B35; font-weight: bold;">72%</span><br>
+            <span style="font-size: 12px; color: #57606A;">Crop burning in Punjab/Haryana</span>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF9800;">
-            <b>Central India</b><br>
-            <span style="font-size: 24px; color: #FF9800;">18%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Forest fires in MP/Chhattisgarh</span>
+        <div style="background-color: #FFF8E1; padding: 15px; border-radius: 8px; border-left: 4px solid #FF9800; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <b style="color: #1F2328;">Central India</b><br>
+            <span style="font-size: 24px; color: #FF9800; font-weight: bold;">18%</span><br>
+            <span style="font-size: 12px; color: #57606A;">Forest fires in MP/Chhattisgarh</span>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
-        <div style="background-color: #161B22; padding: 15px; border-radius: 8px; border-left: 4px solid #FF1744;">
-            <b>Northeast</b><br>
-            <span style="font-size: 24px; color: #FF1744;">10%</span><br>
-            <span style="font-size: 12px; color: #8B949E;">Forest fires in NE states</span>
+        <div style="background-color: #FFEBEE; padding: 15px; border-radius: 8px; border-left: 4px solid #FF1744; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <b style="color: #1F2328;">Northeast</b><br>
+            <span style="font-size: 24px; color: #FF1744; font-weight: bold;">10%</span><br>
+            <span style="font-size: 12px; color: #57606A;">Forest fires in NE states</span>
         </div>
         """, unsafe_allow_html=True)
 

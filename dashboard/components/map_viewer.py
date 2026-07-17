@@ -66,14 +66,13 @@ def add_fire_markers(map_obj, fire_data):
         fire_group = folium.FeatureGroup(name="🔥 Active Fires", show=True)
         
         for idx, row in fire_data.iterrows():
-            # Color based on intensity
             intensity = row['intensity']
             if intensity > 80:
-                color = '#FF0000'  # Red
+                color = '#B91C1C'  # Dark Red
             elif intensity > 50:
-                color = '#FF6600'  # Orange
+                color = '#EF4444'  # Crimson Red
             else:
-                color = '#FFFF00'  # Yellow
+                color = '#F97316'  # Orange
             
             # Add circle marker
             folium.CircleMarker(
@@ -103,16 +102,15 @@ def add_hcho_markers(map_obj, hcho_data):
         hcho_group = folium.FeatureGroup(name="☁️ HCHO Hotspots", show=True)
         
         for idx, row in hcho_data.iterrows():
-            # Color based on concentration
             conc = row['concentration']
             if conc > 15:
-                color = '#8E44AD'  # Purple - High
+                color = '#6D28D9'  # Deep Purple - High
                 status = 'High'
             elif conc > 10:
-                color = '#E74C3C'  # Red - Medium
+                color = '#8B5CF6'  # Medium Purple - Medium
                 status = 'Medium'
             else:
-                color = '#F39C12'  # Orange - Low
+                color = '#A78BFA'  # Light Purple - Low
                 status = 'Low'
             
             # Add marker
@@ -151,7 +149,7 @@ def display_map(map_obj, height=500):
     Returns:
         Click data from st_folium
     """
-    map_data = st_folium(map_obj, width=1200, height=height)
+    map_data = st_folium(map_obj, use_container_width=True, height=height)
     return map_data
 
 def create_interactive_map(aqi_data=None, fire_data=None, hcho_data=None, 

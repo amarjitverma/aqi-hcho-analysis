@@ -13,6 +13,17 @@ from pathlib import Path
 
 def render():
     """Render the Map View page."""
+    import sys
+    from pathlib import Path
+    dashboard_path = Path(__file__).parent.parent
+    if str(dashboard_path) not in sys.path:
+        sys.path.insert(0, str(dashboard_path))
+
+    from components.header import render_header
+    from components.navigation import render_navigation
+    render_header()
+    render_navigation('map_view')
+    
     st.header("🗺️ Interactive Map View")
     st.caption("Explore air quality data across India")
     
@@ -30,7 +41,7 @@ def render():
         m = folium.Map(
             location=[20.5937, 78.9629],
             zoom_start=5,
-            tiles="CartoDB dark_matter",
+            tiles="CartoDB positron",
             control_scale=True
         )
         
@@ -67,16 +78,16 @@ def render():
                         Cells: {props.get('num_cells', 0)}<br>
                         HCHO: {props.get('mean_hcho', 0):.4f} mol/m²
                         """,
-                        color=props.get('color', '#FF6B35'),
+                        color=props.get('color', '#6D28D9'),
                         fill=True,
-                        fill_color=props.get('color', '#FF6B35'),
+                        fill_color=props.get('color', '#6D28D9'),
                         fill_opacity=0.7
                     ).add_to(m)
             except:
                 pass
         
         # Display map
-        st_folium(m, width=700, height=550)
+        st_folium(m, use_container_width=True, height=550)
         
         # Map info
         st.caption("🟢 Click on markers for more information")

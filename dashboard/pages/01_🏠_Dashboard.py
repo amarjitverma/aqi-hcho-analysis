@@ -39,10 +39,12 @@ if 'show_hcho' not in st.session_state:
     st.session_state.show_hcho = True
 
 # ============================================================
-# Render Header
+# Render Header & Navigation
 # ============================================================
 
 render_header()
+from components.navigation import render_navigation
+render_navigation('dashboard')
 
 # ============================================================
 # KPI Cards Row
@@ -287,11 +289,11 @@ with footer_col1:
     """)
 
 with footer_col2:
-    st.markdown("""
+    st.markdown(f"""
     **Data Updated:**
     
     {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} IST
-    """.format(datetime=datetime))
+    """)
 
 with footer_col3:
     st.markdown("""

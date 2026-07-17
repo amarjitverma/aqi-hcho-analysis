@@ -13,6 +13,17 @@ from pathlib import Path
 
 def render():
     """Render the Biomass Burning page."""
+    import sys
+    from pathlib import Path
+    dashboard_path = Path(__file__).parent.parent
+    if str(dashboard_path) not in sys.path:
+        sys.path.insert(0, str(dashboard_path))
+
+    from components.header import render_header
+    from components.navigation import render_navigation
+    render_header()
+    render_navigation('biomass_burning')
+    
     st.header("🔥 Biomass Burning & HCHO Analysis")
     st.caption("Analyze HCHO hotspots and their correlation with fire activity")
     
@@ -45,7 +56,7 @@ def render():
                 title='Hotspot Distribution',
                 color_discrete_sequence=px.colors.qualitative.Set3
             )
-            fig.update_layout(template='plotly_dark', height=400)
+            fig.update_layout(template='plotly_white', height=400)
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
@@ -55,7 +66,7 @@ def render():
                 color='Source',
                 color_discrete_sequence=px.colors.qualitative.Set3
             )
-            fig.update_layout(template='plotly_dark', height=400)
+            fig.update_layout(template='plotly_white', height=400)
             st.plotly_chart(fig, use_container_width=True)
     
     # Fire-HCHO Correlation
@@ -74,7 +85,7 @@ def render():
         color='pearson_r',
         color_continuous_scale='RdYlGn'
     )
-    fig.update_layout(template='plotly_dark', height=400)
+    fig.update_layout(template='plotly_white', height=400)
     st.plotly_chart(fig, use_container_width=True)
     
     # Key insights
