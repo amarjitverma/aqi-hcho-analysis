@@ -228,7 +228,7 @@ with tab1:
     - Historical time-series animation
     """)
     if st.button("Go to Map View", key="goto_map"):
-        st.session_state.page = "02_🗺️_Map_View"
+        st.session_state.page = "02_Map_View"
         st.rerun()
 
 with tab2:
@@ -242,7 +242,7 @@ with tab2:
     - Model performance over time
     """)
     if st.button("Go to Model Performance", key="goto_model"):
-        st.session_state.page = "03_📊_Model_Performance"
+        st.session_state.page = "03_Model_Performance"
         st.rerun()
 
 with tab3:
@@ -256,7 +256,7 @@ with tab3:
     - Pollution trajectory prediction
     """)
     if st.button("Go to Biomass Burning", key="goto_biomass"):
-        st.session_state.page = "04_🔥_Biomass_Burning"
+        st.session_state.page = "04_Biomass_Burning"
         st.rerun()
 
 with tab4:
@@ -270,7 +270,7 @@ with tab4:
     - Scheduled email delivery
     """)
     if st.button("Go to Export", key="goto_export"):
-        st.session_state.page = "05_📥_Export_Share"
+        st.session_state.page = "05_Export_Share"
         st.rerun()
 
 st.divider()
