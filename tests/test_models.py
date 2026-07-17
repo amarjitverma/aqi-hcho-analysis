@@ -19,6 +19,13 @@ from src.models.convlstm.convlstm import ConvLSTMModel
 from src.models.transformer.transformer import TransformerModel
 
 
+@pytest.fixture(autouse=True)
+def clear_session():
+    """Automatically clear Keras session after each test to prevent thread locks/memory leaks."""
+    yield
+    tf.keras.backend.clear_session()
+
+
 class TestLSTMModel:
     """Tests for LSTM model."""
     
@@ -56,18 +63,18 @@ class TestCNNLSTMModel:
     def test_build(self):
         """Test model building."""
         model = CNNLSTMModel()
-        input_shape = (7, 32, 32, 6)  # seq_length, height, width, channels
+        input_shape = (7, 4, 4, 6)  # seq_length, height, width, channels
         model.build(input_shape)
         assert model.model is not None
     
     def test_predict_shape(self):
         """Test prediction shape."""
         model = CNNLSTMModel()
-        input_shape = (7, 32, 32, 6)
+        input_shape = (7, 4, 4, 6)
         model.build(input_shape)
         model.compile()
         
-        X_test = np.random.randn(10, 7, 32, 32, 6)
+        X_test = np.random.randn(10, 7, 4, 4, 6)
         pred = model.predict(X_test)
         assert pred.shape == (10,)
 
@@ -78,18 +85,18 @@ class TestConvLSTMModel:
     def test_build(self):
         """Test model building."""
         model = ConvLSTMModel()
-        input_shape = (7, 32, 32, 6)
+        input_shape = (7, 4, 4, 6)
         model.build(input_shape)
         assert model.model is not None
     
     def test_predict_shape(self):
         """Test prediction shape."""
         model = ConvLSTMModel()
-        input_shape = (7, 32, 32, 6)
+        input_shape = (7, 4, 4, 6)
         model.build(input_shape)
         model.compile()
         
-        X_test = np.random.randn(10, 7, 32, 32, 6)
+        X_test = np.random.randn(10, 7, 4, 4, 6)
         pred = model.predict(X_test)
         assert pred.shape == (10,)
 

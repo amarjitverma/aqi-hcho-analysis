@@ -9,6 +9,7 @@ Downloads CPCB ground monitoring data via OpenAQ API.
 import os
 import pandas as pd
 import requests
+import time
 from dotenv import load_dotenv
 from loguru import logger
 
@@ -46,18 +47,99 @@ def download_cpcb(
     if cities is None:
         cities = ["Delhi", "Mumbai", "Kolkata", "Bengaluru", "Chennai"]
 
+    headers = {"X-API-Key": api_key}
+    
+    # 1. Fetch all locations in India
+    logger.info("📡 Fetching locations index from OpenAQ v3...")
+    try:
+        loc_url = "https://api.openaq.org/v3/locations"
+        loc_params = {"countries_id": 9, "limit": 1000}
+        loc_res = requests.get(loc_url, headers=headers, params=loc_params, timeout=30)
+        loc_res.raise_for_status()
+        locations = loc_res.json().get("results", [])
+    except Exception as e:
+        logger.error(f"❌ Failed to fetch locations index: {e}. Using mock data.")
+        return _generate_mock_cpcb_data()
+
+    # Map locations to target cities
+    city_sensors = {c: [] for c in cities}
+    for loc in locations:
+        name = loc.get("name", "")
+        if name is None:
+            name = ""
+        name = name.lower()
+        
+        matched_city = None
+        for city in cities:
+            if city.lower() in name or (city == "Bengaluru" and "bangalore" in name):
+                matched_city = city
+                break
+        if not matched_city:
+            continue
+            
+        coords = loc.get("coordinates", {})
+        for s in loc.get("sensors", []):
+            if s.get("parameter", {}).get("name") == "pm25":
+                city_sensors[matched_city].append({
+                    "sensor_id": s["id"],
+                    "lat": coords.get("latitude"),
+                    "lon": coords.get("longitude")
+                })
+
+    # Sort sensors descending by sensor_id (prioritizing newer active sensors)
+    for city in cities:
+        city_sensors[city].sort(key=lambda x: x["sensor_id"], reverse=True)
+
     all_data = []
 
+    # 2. Fetch daily measurements for each city
     for city in cities:
-        try:
-            df = _fetch_city_data(city, start_date, end_date, api_key)
-            if df is not None and not df.empty:
-                all_data.append(df)
-        except Exception as e:
-            logger.error(f"❌ Failed to fetch {city}: {e}")
+        sensors = city_sensors[city]
+        logger.info(f"📥 Querying {city} ground data (found {len(sensors)} candidate PM2.5 sensors)...")
+        
+        city_records_count = 0
+        # Query up to 5 sensors per city to represent city-wide data
+        for s_info in sensors[:5]:
+            sensor_id = s_info["sensor_id"]
+            m_url = f"https://api.openaq.org/v3/sensors/{sensor_id}/measurements/daily"
+            m_params = {
+                "datetime_from": start_date,
+                "datetime_to": end_date,
+                "limit": 100
+            }
+            # Pause to prevent rate limits
+            time.sleep(0.3)
+            try:
+                res = requests.get(m_url, headers=headers, params=m_params, timeout=15)
+                if res.status_code == 200:
+                    results = res.json().get("results", [])
+                    if results:
+                        logger.info(f"  Sensor {sensor_id} -> Fetched {len(results)} daily records")
+                        records = []
+                        for item in results:
+                            val = item.get("value")
+                            if val is not None and val > 0:
+                                records.append({
+                                    "city": city,
+                                    "pm25": val,
+                                    "date": item.get("period", {}).get("datetimeFrom", {}).get("utc"),
+                                    "latitude": s_info["lat"],
+                                    "longitude": s_info["lon"]
+                                })
+                        df = pd.DataFrame(records)
+                        if not df.empty:
+                            all_data.append(df)
+                            city_records_count += len(df)
+                            if city_records_count >= 100:
+                                break
+                elif res.status_code == 429:
+                    logger.warning(f"  Sensor {sensor_id} hit rate limits (429). Pausing...")
+                    time.sleep(2)
+            except Exception as e:
+                logger.debug(f"  Failed to fetch sensor {sensor_id}: {e}")
 
     if not all_data:
-        logger.warning("No CPCB data fetched. Using mock data.")
+        logger.warning("⚠️ No CPCB ground data could be fetched. Using mock data.")
         return _generate_mock_cpcb_data()
 
     combined_df = pd.concat(all_data, ignore_index=True)
@@ -67,49 +149,8 @@ def download_cpcb(
     output_path = os.path.join(output_dir, f"cpcb_{start_date}_{end_date}.csv")
     combined_df.to_csv(output_path, index=False)
 
-    logger.info(f"✅ Downloaded CPCB data to {output_path}")
+    logger.info(f"✅ Ground CPCB data successfully downloaded to {output_path}")
     return combined_df
-
-
-def _fetch_city_data(city: str, start_date: str, end_date: str, api_key: str) -> pd.DataFrame:
-    """Fetch data for a single city from OpenAQ."""
-    url = "https://api.openaq.org/v3/measurements"
-
-    headers = {"X-API-Key": api_key}
-    params = {
-        "parameter": "pm25",
-        "city": city,
-        "date_from": start_date,
-        "date_to": end_date,
-        "limit": 1000,
-    }
-
-    try:
-        response = requests.get(url, headers=headers, params=params, timeout=30)
-        response.raise_for_status()
-        data = response.json()
-
-        if "results" not in data or not data["results"]:
-            return pd.DataFrame()
-
-        # Parse results
-        records = []
-        for result in data["results"]:
-            records.append(
-                {
-                    "city": result.get("city", city),
-                    "pm25": result.get("value"),
-                    "date": result.get("date", {}).get("utc"),
-                    "latitude": result.get("coordinates", {}).get("latitude"),
-                    "longitude": result.get("coordinates", {}).get("longitude"),
-                }
-            )
-
-        return pd.DataFrame(records)
-
-    except Exception as e:
-        logger.error(f"❌ Error fetching {city}: {e}")
-        return pd.DataFrame()
 
 
 def _generate_mock_cpcb_data(n_points: int = 1000) -> pd.DataFrame:

@@ -45,7 +45,7 @@ def download_firms(
     bbox = "68.0,8.0,98.0,38.0"
 
     # FIRMS API URL
-    url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{api_key}/VIIRS_SP/70.0,8.0,100.0,40.0/1/{start_date}"
+    url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{api_key}/VIIRS_SNPP_SP/70.0,8.0,100.0,40.0/1/{start_date}"
 
     try:
         response = requests.get(url, timeout=30)

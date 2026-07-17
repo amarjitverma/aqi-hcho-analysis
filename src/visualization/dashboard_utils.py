@@ -11,7 +11,7 @@ from pathlib import Path
 from loguru import logger
 
 
-def generate_aqi_grid(pm25_predictions, lat_grid, lon_grid, output_path="dashboard/data/aqi_grid.json"):
+def generate_aqi_grid(pm25_predictions, lat_grid, lon_grid, output_path="dashboard/cache/aqi_grid.json"):
     """
     Generate AQI grid data from PM2.5 predictions.
 
@@ -59,7 +59,7 @@ def generate_aqi_grid(pm25_predictions, lat_grid, lon_grid, output_path="dashboa
     logger.info(f"💾 AQI grid exported to {output_path} ({len(features)} points)")
 
 
-def generate_model_metrics(metrics, output_path="dashboard/data/model_metrics.json"):
+def generate_model_metrics(metrics, output_path="dashboard/cache/model_metrics.json"):
     """
     Generate model metrics JSON for dashboard.
 

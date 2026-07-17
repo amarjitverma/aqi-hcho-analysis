@@ -16,8 +16,14 @@ from loguru import logger
 
 load_dotenv()
 
-# India bounding box
-INDIA_BBOX = ee.Geometry.Rectangle([68.0, 8.0, 98.0, 38.0])
+# India bounding box (initialized lazily to avoid exceptions during module imports)
+_india_bbox = None
+
+def get_india_bbox():
+    global _india_bbox
+    if _india_bbox is None:
+        _india_bbox = ee.Geometry.Rectangle([68.0, 8.0, 98.0, 38.0])
+    return _india_bbox
 
 # Product configurations
 PRODUCTS = {
@@ -95,13 +101,13 @@ def download_sentinel5p(
     config = PRODUCTS[product]
 
     # Load collection
-    collection = ee.ImageCollection(config["collection"]).filterDate(start_date, end_date).filterBounds(INDIA_BBOX)
+    collection = ee.ImageCollection(config["collection"]).filterDate(start_date, end_date).filterBounds(get_india_bbox())
 
     # Quality filter (qa_value > 0.5 for cloud-free)
     collection = collection.map(lambda img: img.updateMask(img.select("qa_value").gt(0.5)))
 
     # Mean composite
-    image = collection.select(config["band"]).mean().clip(INDIA_BBOX)
+    image = collection.select(config["band"]).mean().clip(get_india_bbox())
 
     # Create output directory
     output_dir = os.path.join(output_dir, product.lower())
@@ -112,7 +118,7 @@ def download_sentinel5p(
 
     try:
         geemap.ee_export_image(
-            image, filename=output_path, scale=2500, region=INDIA_BBOX
+            image, filename=output_path, scale=2500, region=get_india_bbox()
         )
         logger.info(f"✅ Downloaded {product} to {output_path}")
         return output_path

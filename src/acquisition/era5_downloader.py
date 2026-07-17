@@ -52,7 +52,13 @@ def download_era5(
 
     # Download via CDS API
     try:
-        client = cdsapi.Client()
+        # Initialize CDS client with environment variables if available
+        url = os.getenv("CDS_URL")
+        key = os.getenv("CDS_API_KEY")
+        if url and key:
+            client = cdsapi.Client(url=url, key=key)
+        else:
+            client = cdsapi.Client()
         client.retrieve(
             "reanalysis-era5-single-levels",
             {
