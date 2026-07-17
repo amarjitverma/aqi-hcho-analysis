@@ -85,6 +85,27 @@ def render():
                     ).add_to(m)
             except:
                 pass
+                
+        # Load and add real active fires from download cache
+        if show_fire:
+            try:
+                from utils.data_loader import load_fire_data
+                df_fires = load_fire_data()
+                # Subsample if there are too many fire markers to prevent browser lags
+                if len(df_fires) > 1000:
+                    df_fires = df_fires.sample(1000, random_state=42)
+                for _, row in df_fires.iterrows():
+                    folium.CircleMarker(
+                        location=[row['lat'], row['lon']],
+                        radius=2.5,
+                        popup=f"Active Fire<br>FRP (Intensity): {row['intensity']:.2f}<br>Time: {row['detected_time']}",
+                        color='#FF3B30',
+                        fill=True,
+                        fill_color='#FF3B30',
+                        fill_opacity=0.8
+                    ).add_to(m)
+            except Exception as e:
+                pass
         
         # Display map
         st_folium(m, use_container_width=True, height=550)
