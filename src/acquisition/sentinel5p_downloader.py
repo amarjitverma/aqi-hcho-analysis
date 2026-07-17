@@ -29,31 +29,41 @@ def get_india_bbox():
 PRODUCTS = {
     "NO2": {
         "collection": "COPERNICUS/S5P/OFFL/L3_NO2",
-        "band": "nitrogen_dioxide_column_number_density",
+        "band": "tropospheric_NO2_column_number_density",
+        "qa_band": "cloud_fraction",      # use cloud_fraction < 0.3 as QA proxy
+        "qa_type": "cloud",
         "scale": 0.00001,
         "unit": "mol/m²",
     },
     "SO2": {
         "collection": "COPERNICUS/S5P/OFFL/L3_SO2",
-        "band": "sulfur_dioxide_column_number_density",
+        "band": "SO2_column_number_density",
+        "qa_band": "cloud_fraction",
+        "qa_type": "cloud",
         "scale": 0.00001,
         "unit": "mol/m²",
     },
     "CO": {
         "collection": "COPERNICUS/S5P/OFFL/L3_CO",
-        "band": "carbon_monoxide_column_number_density",
+        "band": "CO_column_number_density",
+        "qa_band": None,                   # no QA filter for CO
+        "qa_type": None,
         "scale": 0.00001,
         "unit": "mol/m²",
     },
     "O3": {
         "collection": "COPERNICUS/S5P/OFFL/L3_O3",
-        "band": "ozone_column_number_density",
+        "band": "O3_column_number_density",
+        "qa_band": "cloud_fraction",
+        "qa_type": "cloud",
         "scale": 0.00001,
         "unit": "mol/m²",
     },
     "HCHO": {
         "collection": "COPERNICUS/S5P/OFFL/L3_HCHO",
         "band": "tropospheric_HCHO_column_number_density",
+        "qa_band": "cloud_fraction",
+        "qa_type": "cloud",
         "scale": 0.00001,
         "unit": "mol/m²",
     },
@@ -101,12 +111,19 @@ def download_sentinel5p(
     config = PRODUCTS[product]
 
     # Load collection
-    collection = ee.ImageCollection(config["collection"]).filterDate(start_date, end_date).filterBounds(get_india_bbox())
+    collection = (
+        ee.ImageCollection(config["collection"])
+        .filterDate(start_date, end_date)
+        .filterBounds(get_india_bbox())
+    )
 
-    # Quality filter (qa_value > 0.5 for cloud-free)
-    collection = collection.map(lambda img: img.updateMask(img.select("qa_value").gt(0.5)))
+    # Quality filter — use cloud_fraction < 0.3 where available
+    if config.get("qa_band") and config.get("qa_type") == "cloud":
+        collection = collection.map(
+            lambda img: img.updateMask(img.select(config["qa_band"]).lt(0.3))
+        )
 
-    # Mean composite
+    # Mean composite over the period
     image = collection.select(config["band"]).mean().clip(get_india_bbox())
 
     # Create output directory
