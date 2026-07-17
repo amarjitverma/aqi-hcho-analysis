@@ -31,7 +31,7 @@ class HCHOHotspotDetector:
         self.clusters = None
         self.high_cells = None
 
-    def detect(self, hcho_grid, lat_grid, lon_grid):
+    def detect(self, hcho_grid, lat_grid, lon_grid, max_dbscan_points: int = 50_000):
         """
         Detect HCHO hotspots.
 
@@ -39,6 +39,7 @@ class HCHOHotspotDetector:
             hcho_grid (np.ndarray): 2D HCHO concentration grid
             lat_grid (np.ndarray): 2D latitude grid
             lon_grid (np.ndarray): 2D longitude grid
+            max_dbscan_points (int): Cap on points fed to DBSCAN to avoid MemoryError
 
         Returns:
             dict: Cluster information
@@ -47,29 +48,39 @@ class HCHOHotspotDetector:
 
         # Flatten arrays
         hcho_flat = hcho_grid.flatten()
-        lat_flat = lat_grid.flatten()
-        lon_flat = lon_grid.flatten()
+        lat_flat  = lat_grid.flatten()
+        lon_flat  = lon_grid.flatten()
 
-        # Apply threshold
-        positive_mask = hcho_flat > 0
-        if not np.any(positive_mask):
+        # Remove NaN / non-positive
+        valid_mask   = np.isfinite(hcho_flat) & (hcho_flat > 0)
+        if not np.any(valid_mask):
             logger.warning("No positive HCHO values found")
             return {}
 
-        threshold = np.percentile(hcho_flat[positive_mask], self.percentile_threshold)
-        high_idx = hcho_flat > threshold
+        # Apply percentile threshold  → keep top N%
+        threshold = np.percentile(hcho_flat[valid_mask], self.percentile_threshold)
+        high_idx  = valid_mask & (hcho_flat > threshold)
 
         if not np.any(high_idx):
-            logger.warning("No high HCHO cells found")
+            logger.warning("No high HCHO cells found above threshold")
             return {}
 
-        # Extract coordinates
-        coords = np.column_stack([lon_flat[high_idx], lat_flat[high_idx]])
+        coords      = np.column_stack([lon_flat[high_idx], lat_flat[high_idx]])
         hcho_values = hcho_flat[high_idx]
+
+        # ── Spatial downsampling ────────────────────────────────────────────
+        n_high = len(hcho_values)
+        logger.info(f"  High-HCHO cells above {self.percentile_threshold}th pct: {n_high:,}")
+        if n_high > max_dbscan_points:
+            step = int(np.ceil(n_high / max_dbscan_points))
+            coords      = coords[::step]
+            hcho_values = hcho_values[::step]
+            logger.info(f"  Downsampled to {len(hcho_values):,} points (step={step})")
+
         self.high_cells = coords
 
         # Scale coordinates
-        scaler = StandardScaler()
+        scaler        = StandardScaler()
         coords_scaled = scaler.fit_transform(coords)
 
         # Apply DBSCAN
@@ -81,6 +92,7 @@ class HCHOHotspotDetector:
 
         logger.info(f"  Found {len(self.clusters)} clusters")
         return self.clusters
+
 
     def _process_clusters(self, coords, values, labels):
         """Process DBSCAN results into cluster dictionaries."""
