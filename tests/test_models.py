@@ -127,7 +127,7 @@ class TestModelBase:
         model.compile()
         
         # Save
-        save_path = str(tmp_path / "test_model.keras")
+        save_path = str(tmp_path / "test_model.h5")
         model.save(save_path)
         
         # Load

@@ -74,7 +74,7 @@ class Predictor:
         else:
             # Load single model
             if model_path is None:
-                model_path = self.model_dir / model_name / "best_model.keras"
+                model_path = self.model_dir / model_name / "best_model.h5"
 
             self.model = models[model_name]()
             self.model.load(str(model_path))
@@ -84,7 +84,7 @@ class Predictor:
         """Load all models for ensemble."""
         models = []
         for name in ["lstm", "cnn_lstm", "convlstm", "transformer"]:
-            model_path = self.model_dir / name / "best_model.keras"
+            model_path = self.model_dir / name / "best_model.h5"
             if model_path.exists():
                 model_class = {
                     "lstm": LSTMModel,

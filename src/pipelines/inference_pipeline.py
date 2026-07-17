@@ -52,7 +52,7 @@ class InferencePipeline:
             raise ValueError(f"Unknown model: {model_name}")
 
         if model_path is None:
-            model_path = self.model_dir / model_name / "best_model.keras"
+            model_path = self.model_dir / model_name / "best_model.h5"
 
         self.model = models[model_name]()
         self.model.load(str(model_path))

@@ -40,6 +40,7 @@ class ConvLSTMModel(BaseModel):
                 padding="same", return_sequences=False
             ),
             layers.BatchNormalization(),
+            layers.Flatten(),
             layers.Dense(64, activation="relu"),
             layers.Dropout(0.2),
             layers.Dense(1),

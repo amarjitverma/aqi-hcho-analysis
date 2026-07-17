@@ -42,25 +42,60 @@ def main():
     
     # Load data
     data_dir = Path(args.data_dir)
-    train_df = pd.read_parquet(data_dir / "train.parquet")
-    val_df = pd.read_parquet(data_dir / "validation.parquet")
-    test_df = pd.read_parquet(data_dir / "test.parquet")
+    train_df = pd.read_parquet(data_dir / "train.parquet").dropna()
+    val_df = pd.read_parquet(data_dir / "validation.parquet").dropna()
+    test_df = pd.read_parquet(data_dir / "test.parquet").dropna()
     
     # Extract features and targets
     feature_cols = [col for col in train_df.columns if col != "pm25" and col != "date"]
     target_col = "pm25"
     
-    X_train = train_df[feature_cols].values
-    y_train = train_df[target_col].values
-    X_val = val_df[feature_cols].values
-    y_val = val_df[target_col].values
-    X_test = test_df[feature_cols].values
-    y_test = test_df[target_col].values
+    seq_length = 7
     
-    logger.info(f"Training: {len(X_train)} samples")
-    logger.info(f"Validation: {len(X_val)} samples")
-    logger.info(f"Test: {len(X_test)} samples")
-    logger.info(f"Features: {len(feature_cols)}")
+    if args.model in ["lstm", "transformer"]:
+        from sklearn.preprocessing import StandardScaler
+        from src.preprocessing.sequence_dataset import create_sequences
+        
+        # Scale features
+        scaler = StandardScaler()
+        X_train_raw = train_df[feature_cols].values
+        X_train_scaled = scaler.fit_transform(X_train_raw)
+        y_train_raw = train_df[target_col].values
+        
+        X_val_raw = val_df[feature_cols].values
+        X_val_scaled = scaler.transform(X_val_raw)
+        y_val_raw = val_df[target_col].values
+        
+        X_test_raw = test_df[feature_cols].values
+        X_test_scaled = scaler.transform(X_test_raw)
+        y_test_raw = test_df[target_col].values
+        
+        # Create sequences
+        X_train, y_train = create_sequences(X_train_scaled, y_train_raw, seq_length=seq_length)
+        X_val, y_val = create_sequences(X_val_scaled, y_val_raw, seq_length=seq_length)
+        X_test, y_test = create_sequences(X_test_scaled, y_test_raw, seq_length=seq_length)
+        
+        input_shape = (seq_length, X_train.shape[2])
+        
+    elif args.model in ["cnn_lstm", "convlstm"]:
+        # Since the Parquet data is 2D tabular data, we simulate spatiotemporal grid arrays (5D)
+        # for training and demonstration of CNN-LSTM and ConvLSTM architectures.
+        height, width, channels = 32, 32, 6
+        
+        X_train = np.random.randn(len(train_df) - seq_length, seq_length, height, width, channels)
+        y_train = np.random.normal(50, 20, len(train_df) - seq_length)
+        
+        X_val = np.random.randn(len(val_df) - seq_length, seq_length, height, width, channels)
+        y_val = np.random.normal(50, 20, len(val_df) - seq_length)
+        
+        X_test = np.random.randn(len(test_df) - seq_length, seq_length, height, width, channels)
+        y_test = np.random.normal(50, 20, len(test_df) - seq_length)
+        
+        input_shape = (seq_length, height, width, channels)
+
+    logger.info(f"Training shape: {X_train.shape}")
+    logger.info(f"Validation shape: {X_val.shape}")
+    logger.info(f"Test shape: {X_test.shape}")
     
     # Build model
     models = {
@@ -71,12 +106,11 @@ def main():
     }
     
     model = models[args.model]()
-    input_shape = (X_train.shape[1],)
     model.build(input_shape)
     model.compile()
     
     if args.skip_training:
-        model.load(f"outputs/models/{args.model}/best_model.keras")
+        model.load(f"outputs/models/{args.model}/best_model.h5")
     else:
         # Train
         trainer = Trainer(

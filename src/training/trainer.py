@@ -111,7 +111,7 @@ class Trainer:
         callbacks = []
 
         # Checkpoint callback
-        checkpoint_path = self.output_dir / "best_model.keras"
+        checkpoint_path = self.output_dir / "best_model.h5"
         callbacks.append(
             tf.keras.callbacks.ModelCheckpoint(
                 filepath=str(checkpoint_path),
@@ -163,13 +163,13 @@ class Trainer:
 
     def save_checkpoint(self, name: str = "latest") -> None:
         """Save model checkpoint."""
-        path = self.output_dir / f"{name}.keras"
+        path = self.output_dir / f"{name}.h5"
         self.model.save(path)
         logger.info(f"💾 Checkpoint saved to {path}")
 
     def load_checkpoint(self, name: str = "best_model") -> None:
         """Load model checkpoint."""
-        path = self.output_dir / f"{name}.keras"
+        path = self.output_dir / f"{name}.h5"
         if path.exists():
             self.model = tf.keras.models.load_model(path)
             logger.info(f"📥 Checkpoint loaded from {path}")
