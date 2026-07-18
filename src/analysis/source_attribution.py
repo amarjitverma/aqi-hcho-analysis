@@ -34,13 +34,15 @@ class SourceAttribution:
         contributions = []
         for cluster in clusters.values():
             cluster_total = cluster["mean_hcho"] * cluster["num_cells"]
-            contributions.append({
-                "source_region": cluster["source_region"],
-                "num_cells": cluster["num_cells"],
-                "mean_hcho": cluster["mean_hcho"],
-                "total_contribution": cluster_total,
-                "percentage": (cluster_total / total) * 100 if total > 0 else 0
-            })
+            contributions.append(
+                {
+                    "source_region": cluster["source_region"],
+                    "num_cells": cluster["num_cells"],
+                    "mean_hcho": cluster["mean_hcho"],
+                    "total_contribution": cluster_total,
+                    "percentage": (cluster_total / total) * 100 if total > 0 else 0,
+                }
+            )
 
         df = pd.DataFrame(contributions)
         df = df.sort_values("percentage", ascending=False)

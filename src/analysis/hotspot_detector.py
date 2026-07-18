@@ -48,24 +48,24 @@ class HCHOHotspotDetector:
 
         # Flatten arrays
         hcho_flat = hcho_grid.flatten()
-        lat_flat  = lat_grid.flatten()
-        lon_flat  = lon_grid.flatten()
+        lat_flat = lat_grid.flatten()
+        lon_flat = lon_grid.flatten()
 
         # Remove NaN / non-positive
-        valid_mask   = np.isfinite(hcho_flat) & (hcho_flat > 0)
+        valid_mask = np.isfinite(hcho_flat) & (hcho_flat > 0)
         if not np.any(valid_mask):
             logger.warning("No positive HCHO values found")
             return {}
 
         # Apply percentile threshold  → keep top N%
         threshold = np.percentile(hcho_flat[valid_mask], self.percentile_threshold)
-        high_idx  = valid_mask & (hcho_flat > threshold)
+        high_idx = valid_mask & (hcho_flat > threshold)
 
         if not np.any(high_idx):
             logger.warning("No high HCHO cells found above threshold")
             return {}
 
-        coords      = np.column_stack([lon_flat[high_idx], lat_flat[high_idx]])
+        coords = np.column_stack([lon_flat[high_idx], lat_flat[high_idx]])
         hcho_values = hcho_flat[high_idx]
 
         # ── Spatial downsampling ────────────────────────────────────────────
@@ -73,14 +73,14 @@ class HCHOHotspotDetector:
         logger.info(f"  High-HCHO cells above {self.percentile_threshold}th pct: {n_high:,}")
         if n_high > max_dbscan_points:
             step = int(np.ceil(n_high / max_dbscan_points))
-            coords      = coords[::step]
+            coords = coords[::step]
             hcho_values = hcho_values[::step]
             logger.info(f"  Downsampled to {len(hcho_values):,} points (step={step})")
 
         self.high_cells = coords
 
         # Scale coordinates
-        scaler        = StandardScaler()
+        scaler = StandardScaler()
         coords_scaled = scaler.fit_transform(coords)
 
         # Apply DBSCAN
@@ -92,7 +92,6 @@ class HCHOHotspotDetector:
 
         logger.info(f"  Found {len(self.clusters)} clusters")
         return self.clusters
-
 
     def _process_clusters(self, coords, values, labels):
         """Process DBSCAN results into cluster dictionaries."""
@@ -119,7 +118,7 @@ class HCHOHotspotDetector:
                 "max_hcho": float(np.max(cluster_values)),
                 "source_region": source_region,
                 "color": colors[idx % len(colors)],
-                "cells": cluster_cells.tolist()
+                "cells": cluster_cells.tolist(),
             }
 
         return clusters
@@ -143,15 +142,17 @@ class HCHOHotspotDetector:
 
         stats = []
         for cluster in self.clusters.values():
-            stats.append({
-                "cluster_id": cluster["id"],
-                "num_cells": cluster["num_cells"],
-                "centroid_lat": cluster["centroid_lat"],
-                "centroid_lon": cluster["centroid_lon"],
-                "mean_hcho": cluster["mean_hcho"],
-                "max_hcho": cluster["max_hcho"],
-                "source_region": cluster["source_region"],
-            })
+            stats.append(
+                {
+                    "cluster_id": cluster["id"],
+                    "num_cells": cluster["num_cells"],
+                    "centroid_lat": cluster["centroid_lat"],
+                    "centroid_lon": cluster["centroid_lon"],
+                    "mean_hcho": cluster["mean_hcho"],
+                    "max_hcho": cluster["max_hcho"],
+                    "source_region": cluster["source_region"],
+                }
+            )
 
         return pd.DataFrame(stats).sort_values("mean_hcho", ascending=False)
 
@@ -163,22 +164,24 @@ class HCHOHotspotDetector:
 
         features = []
         for cluster in self.clusters.values():
-            features.append({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [cluster["centroid_lon"], cluster["centroid_lat"]]
-                },
-                "properties": {
-                    "cluster_id": cluster["id"],
-                    "num_cells": cluster["num_cells"],
-                    "mean_hcho": cluster["mean_hcho"],
-                    "max_hcho": cluster["max_hcho"],
-                    "source_region": cluster["source_region"],
-                    "color": cluster["color"],
-                    "radius": np.sqrt(cluster["num_cells"]) * 0.3
+            features.append(
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [cluster["centroid_lon"], cluster["centroid_lat"]],
+                    },
+                    "properties": {
+                        "cluster_id": cluster["id"],
+                        "num_cells": cluster["num_cells"],
+                        "mean_hcho": cluster["mean_hcho"],
+                        "max_hcho": cluster["max_hcho"],
+                        "source_region": cluster["source_region"],
+                        "color": cluster["color"],
+                        "radius": np.sqrt(cluster["num_cells"]) * 0.3,
+                    },
                 }
-            })
+            )
 
         geojson = {"type": "FeatureCollection", "features": features}
 

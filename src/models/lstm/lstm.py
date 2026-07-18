@@ -25,15 +25,17 @@ class LSTMModel(BaseModel):
 
     def build(self, input_shape: tuple) -> tf.keras.Model:
         """Build LSTM model."""
-        model = models.Sequential([
-            layers.LSTM(self.lstm_units, return_sequences=True, input_shape=input_shape),
-            layers.Dropout(self.dropout_rate),
-            layers.LSTM(self.lstm_units // 2),
-            layers.Dropout(self.dropout_rate),
-            layers.Dense(64, activation="relu"),
-            layers.Dropout(0.2),
-            layers.Dense(1, name="pm25_output"),
-        ])
+        model = models.Sequential(
+            [
+                layers.LSTM(self.lstm_units, return_sequences=True, input_shape=input_shape),
+                layers.Dropout(self.dropout_rate),
+                layers.LSTM(self.lstm_units // 2),
+                layers.Dropout(self.dropout_rate),
+                layers.Dense(64, activation="relu"),
+                layers.Dropout(0.2),
+                layers.Dense(1, name="pm25_output"),
+            ]
+        )
 
         self.model = model
         return model
@@ -59,7 +61,8 @@ class LSTMModel(BaseModel):
         ]
 
         history = self.model.fit(
-            X_train, y_train,
+            X_train,
+            y_train,
             validation_data=(X_val, y_val),
             epochs=epochs,
             batch_size=batch_size,

@@ -34,22 +34,24 @@ class TrendAnalyzer:
 
         # Theil-Sen robust regression
         from scipy.stats import theilslopes
+
         theil_slope, theil_intercept, _, _ = theilslopes(data, time_steps)
 
         # Mann-Kendall test for monotonic trend
         from scipy.stats import kendalltau
+
         tau, mk_p_value = kendalltau(time_steps, data)
 
         results = {
             "slope_ols": slope,
             "intercept_ols": intercept,
-            "r2": r_value ** 2,
+            "r2": r_value**2,
             "p_value_ols": p_value,
             "slope_theil": theil_slope,
             "intercept_theil": theil_intercept,
             "mann_kendall_tau": tau,
             "mann_kendall_p": mk_p_value,
-            "significant": p_value < 0.05
+            "significant": p_value < 0.05,
         }
 
         self.trend_results = results
@@ -79,13 +81,13 @@ class TrendAnalyzer:
         ts = pd.Series(data)
 
         try:
-            result = seasonal_decompose(ts, model='additive', period=period)
+            result = seasonal_decompose(ts, model="additive", period=period)
 
             decomposition = {
                 "trend": result.trend.values,
                 "seasonal": result.seasonal.values,
                 "residual": result.resid.values,
-                "observed": result.observed.values
+                "observed": result.observed.values,
             }
 
             self.trend_results = {"decomposition": decomposition}

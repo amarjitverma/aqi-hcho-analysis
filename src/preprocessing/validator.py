@@ -29,7 +29,9 @@ def validate_data(df: pd.DataFrame, schema: dict = None) -> dict:
         "columns": list(df.columns),
         "missing_values": df.isnull().sum().to_dict(),
         "dtypes": df.dtypes.to_dict(),
-        "unique_counts": {col: df[col].nunique() for col in df.select_dtypes(include=["object"]).columns},
+        "unique_counts": {
+            col: df[col].nunique() for col in df.select_dtypes(include=["object"]).columns
+        },
         "passed": True,
     }
 
@@ -90,13 +92,17 @@ def validate_data(df: pd.DataFrame, schema: dict = None) -> dict:
             "end": df["date"].max(),
             "days": (df["date"].max() - df["date"].min()).days,
         }
-        logger.info(f"  Date range: {results['date_range']['start']} to {results['date_range']['end']}")
+        logger.info(
+            f"  Date range: {results['date_range']['start']} to {results['date_range']['end']}"
+        )
 
     logger.info(f"✅ Data validation complete. Passed: {results['passed']}")
     return results
 
 
-def validate_split(train: pd.DataFrame, val: pd.DataFrame, test: pd.DataFrame, date_col: str = "date"):
+def validate_split(
+    train: pd.DataFrame, val: pd.DataFrame, test: pd.DataFrame, date_col: str = "date"
+):
     """
     Validate that splits are chronological and have no overlap.
 
@@ -114,7 +120,9 @@ def validate_split(train: pd.DataFrame, val: pd.DataFrame, test: pd.DataFrame, d
     val_end = val[date_col].max()
     test_start = test[date_col].min()
 
-    assert val_start > train_end, f"Validation set overlaps with training set: {val_start} <= {train_end}"
+    assert (
+        val_start > train_end
+    ), f"Validation set overlaps with training set: {val_start} <= {train_end}"
     assert test_start > val_end, f"Test set overlaps with validation set: {test_start} <= {val_end}"
 
     logger.info("✅ Chronological split validated successfully")
@@ -147,7 +155,9 @@ def validate_spatial_coverage(df: pd.DataFrame, bounds: tuple = (8, 38, 68, 98))
     results["full_coverage"] = lat_coverage and lon_coverage
 
     if not results["full_coverage"]:
-        logger.warning(f"  Spatial coverage incomplete: lat {results['lat_min']}-{results['lat_max']}, lon {results['lon_min']}-{results['lon_max']}")
+        logger.warning(
+            f"  Spatial coverage incomplete: lat {results['lat_min']}-{results['lat_max']}, lon {results['lon_min']}-{results['lon_max']}"
+        )
 
     return results
 

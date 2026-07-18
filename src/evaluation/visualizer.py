@@ -90,6 +90,7 @@ def plot_residuals(
 
     # QQ Plot
     from scipy import stats
+
     stats.probplot(residuals, dist="norm", plot=axes[1, 0])
     axes[1, 0].set_title("QQ Plot of Residuals")
 

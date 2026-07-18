@@ -119,11 +119,13 @@ def align_dataframe_to_grid(
         grid_data[lat_idx, lon_idx] = value
 
     # Create DataFrame
-    grid_df = pd.DataFrame({
-        'latitude': lat_grid.flatten(),
-        'longitude': lon_grid.flatten(),
-        value_col: grid_data.flatten()
-    })
+    grid_df = pd.DataFrame(
+        {
+            "latitude": lat_grid.flatten(),
+            "longitude": lon_grid.flatten(),
+            value_col: grid_data.flatten(),
+        }
+    )
 
     logger.info(f"  Gridded data shape: {grid_df.shape}")
     return grid_df

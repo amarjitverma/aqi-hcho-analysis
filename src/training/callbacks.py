@@ -114,8 +114,7 @@ class ModelCheckpoint(tf.keras.callbacks.Callback):
                 self.model.save(self.filepath)
                 if self.verbose:
                     logger.info(
-                        f"💾 Checkpoint saved at epoch {epoch+1}: "
-                        f"{self.monitor} = {current:.4f}"
+                        f"💾 Checkpoint saved at epoch {epoch+1}: " f"{self.monitor} = {current:.4f}"
                     )
         else:
             # Save every epoch

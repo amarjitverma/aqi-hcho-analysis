@@ -25,12 +25,7 @@ def create_india_map(location=[20.5937, 78.9629], zoom_start=5, tiles="CartoDB d
     Returns:
         folium.Map: Base map
     """
-    m = folium.Map(
-        location=location,
-        zoom_start=zoom_start,
-        tiles=tiles,
-        control_scale=True
-    )
+    m = folium.Map(location=location, zoom_start=zoom_start, tiles=tiles, control_scale=True)
     return m
 
 
@@ -55,8 +50,8 @@ def add_india_boundary(m, shapefile_path="data/external/boundaries/india_boundar
                     "fillColor": "none",
                     "color": "#58A6FF",
                     "weight": 2,
-                    "opacity": 0.5
-                }
+                    "opacity": 0.5,
+                },
             ).add_to(m)
             logger.info("✅ Added India boundary")
         else:
@@ -104,7 +99,7 @@ def add_hcho_hotspots(m, hcho_geojson):
             color=props.get("color", "#FF6B35"),
             fill=True,
             fill_color=props.get("color", "#FF6B35"),
-            fill_opacity=0.7
+            fill_opacity=0.7,
         ).add_to(m)
 
     logger.info(f"✅ Added {len(hcho_geojson['features'])} HCHO hotspots")
@@ -146,7 +141,7 @@ def add_fire_locations(m, fire_geojson):
             color="#FF1744",
             fill=True,
             fill_color="#FF1744",
-            fill_opacity=0.8
+            fill_opacity=0.8,
         ).add_to(m)
 
     logger.info(f"✅ Added {len(fire_geojson['features'])} fire locations")
@@ -186,7 +181,7 @@ def add_wind_vectors(m, wind_data):
                         ➜ {speed:.1f} m/s
                     </div>
                     """
-                )
+                ),
             ).add_to(m)
 
     logger.info(f"✅ Added {len(wind_data)} wind vectors")
@@ -199,7 +194,7 @@ def create_full_map(
     fire_geojson=None,
     wind_data=None,
     show_boundary=True,
-    shapefile_path="data/external/boundaries/india_boundary.geojson"
+    shapefile_path="data/external/boundaries/india_boundary.geojson",
 ):
     """
     Create a complete map with all layers.

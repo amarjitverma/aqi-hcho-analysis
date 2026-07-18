@@ -63,7 +63,9 @@ def fill_gaps(
     return filled
 
 
-def _fill_gaps_2d(data: np.ndarray, window: int = 3, sigma: float = 1.0, method: str = "gaussian") -> np.ndarray:
+def _fill_gaps_2d(
+    data: np.ndarray, window: int = 3, sigma: float = 1.0, method: str = "gaussian"
+) -> np.ndarray:
     """Fill gaps in 2D data."""
     if method == "gaussian":
         # Create masked array

@@ -60,7 +60,9 @@ def download_era5(
         months_list = sorted(list(set(date_range.strftime("%m"))))
         days_list = sorted(list(set(date_range.strftime("%d"))))
     except Exception as e:
-        logger.warning(f"Failed to parse dates {start_date} - {end_date}: {e}. Defaulting to range.")
+        logger.warning(
+            f"Failed to parse dates {start_date} - {end_date}: {e}. Defaulting to range."
+        )
         years_list = [str(y) for y in range(2019, 2024)]
         months_list = [str(m).zfill(2) for m in range(1, 13)]
         days_list = [str(d).zfill(2) for d in range(1, 32)]

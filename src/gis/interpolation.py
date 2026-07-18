@@ -84,7 +84,7 @@ def idw_interpolation(
         # Compute weights
         dist = np.linalg.norm(points[idx] - gp, axis=1)
         dist = np.maximum(dist, 1e-10)  # Avoid division by zero
-        weights = 1 / (dist ** power)
+        weights = 1 / (dist**power)
         weights /= weights.sum()
 
         result[i] = np.sum(values[idx] * weights)

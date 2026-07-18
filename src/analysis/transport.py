@@ -34,8 +34,9 @@ def plume_decay(c_source, distance, wind_speed, decay_constant=0.02):
     return c_source * np.exp(-decay_constant * distance / wind_speed)
 
 
-def model_plume_transport(source_lon, source_lat, wind_u, wind_v,
-                          hcho_source, max_distance=300, decay_constant=0.02):
+def model_plume_transport(
+    source_lon, source_lat, wind_u, wind_v, hcho_source, max_distance=300, decay_constant=0.02
+):
     """
     Model HCHO plume transport downwind.
 
@@ -68,11 +69,13 @@ def model_plume_transport(source_lon, source_lat, wind_u, wind_v,
         "latitudes": lat_plume.tolist(),
         "wind_speed": float(wind_speed),
         "wind_direction": float(wind_dir),
-        "source_hcho": float(hcho_source)
+        "source_hcho": float(hcho_source),
     }
 
     logger.info(f"  Wind: {wind_speed:.2f} m/s, {wind_dir:.1f}°")
-    logger.info(f"  At 100 km: HCHO = {plume_decay(hcho_source, 100, wind_speed, decay_constant):.4f} mol/m²")
+    logger.info(
+        f"  At 100 km: HCHO = {plume_decay(hcho_source, 100, wind_speed, decay_constant):.4f} mol/m²"
+    )
 
     return plume
 
@@ -81,26 +84,27 @@ def export_plume_geojson(plume_data, output_path="outputs/maps/plume_transport.g
     """Export plume transport data as GeoJSON."""
     features = []
     for i in range(len(plume_data["distances"])):
-        features.append({
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    plume_data["longitudes"][i],
-                    plume_data["latitudes"][i]
-                ]
-            },
-            "properties": {
-                "distance": plume_data["distances"][i],
-                "hcho": plume_data["hcho_concentrations"][i]
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [plume_data["longitudes"][i], plume_data["latitudes"][i]],
+                },
+                "properties": {
+                    "distance": plume_data["distances"][i],
+                    "hcho": plume_data["hcho_concentrations"][i],
+                },
             }
-        })
+        )
 
     geojson = {"type": "FeatureCollection", "features": features}
 
     from pathlib import Path
+
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     import json
+
     with open(output_path, "w") as f:
         json.dump(geojson, f, indent=2)
 
@@ -115,6 +119,6 @@ if __name__ == "__main__":
         wind_u=2.0,
         wind_v=-2.0,
         hcho_source=0.01,
-        max_distance=300
+        max_distance=300,
     )
     print(f"Plume length: {len(plume['distances'])} points")

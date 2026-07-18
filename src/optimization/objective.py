@@ -53,6 +53,7 @@ def create_objective(
     Returns:
         callable: Objective function
     """
+
     def objective(trial: optuna.Trial) -> float:
         # Get hyperparameters based on model
         if model_name == "lstm":
@@ -107,8 +108,10 @@ def create_objective(
         # Train
         trainer = Trainer(model=model.model, config={})
         trainer.train(
-            X_train, y_train,
-            X_val, y_val,
+            X_train,
+            y_train,
+            X_val,
+            y_val,
             epochs=epochs,
             batch_size=params.get("batch_size", 32),
             verbose=0,

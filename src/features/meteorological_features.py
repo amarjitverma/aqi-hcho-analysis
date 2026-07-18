@@ -54,7 +54,7 @@ def create_meteorological_features(df: pd.DataFrame) -> pd.DataFrame:
             df["wind_dir"] = np.arctan2(df["wind_v"], df["wind_u"])
         df["wind_dir_category"] = pd.cut(
             df["wind_dir"],
-            bins=[-np.pi, -np.pi/2, 0, np.pi/2, np.pi],
+            bins=[-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi],
             labels=["NW", "NE", "SE", "SW"],
         )
         features_added += 1

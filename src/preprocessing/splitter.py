@@ -50,7 +50,9 @@ def chronological_split(
     return train_df, val_df, test_df
 
 
-def split_sequences(X: np.ndarray, y: np.ndarray, train_ratio: float = 0.70, val_ratio: float = 0.15) -> tuple:
+def split_sequences(
+    X: np.ndarray, y: np.ndarray, train_ratio: float = 0.70, val_ratio: float = 0.15
+) -> tuple:
     """
     Split sequences chronologically.
 

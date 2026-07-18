@@ -68,7 +68,9 @@ def create_forest_mask(lat_grid: np.ndarray, lon_grid: np.ndarray) -> np.ndarray
 
     mask = central_forest | northeast_forest
 
-    logger.info(f"✅ Created forest mask with {mask.sum()} cells ({mask.sum() / mask.size * 100:.1f}%)")
+    logger.info(
+        f"✅ Created forest mask with {mask.sum()} cells ({mask.sum() / mask.size * 100:.1f}%)"
+    )
     return mask
 
 
@@ -110,11 +112,15 @@ def create_urban_mask(
         mask = mask | city_mask
         logger.info(f"  Added {city_name}: {city_mask.sum()} cells")
 
-    logger.info(f"✅ Created urban mask with {mask.sum()} cells ({mask.sum() / mask.size * 100:.1f}%)")
+    logger.info(
+        f"✅ Created urban mask with {mask.sum()} cells ({mask.sum() / mask.size * 100:.1f}%)"
+    )
     return mask
 
 
-def load_shapefile_mask(shapefile_path: str, lat_grid: np.ndarray, lon_grid: np.ndarray) -> np.ndarray:
+def load_shapefile_mask(
+    shapefile_path: str, lat_grid: np.ndarray, lon_grid: np.ndarray
+) -> np.ndarray:
     """
     Load mask from shapefile/GeoJSON.
 
@@ -153,7 +159,9 @@ def load_shapefile_mask(shapefile_path: str, lat_grid: np.ndarray, lon_grid: np.
         return np.ones_like(lat_grid, dtype=bool)
 
 
-def create_region_mask(region_bounds: tuple, lat_grid: np.ndarray, lon_grid: np.ndarray) -> np.ndarray:
+def create_region_mask(
+    region_bounds: tuple, lat_grid: np.ndarray, lon_grid: np.ndarray
+) -> np.ndarray:
     """
     Create mask from region bounds.
 
@@ -166,7 +174,12 @@ def create_region_mask(region_bounds: tuple, lat_grid: np.ndarray, lon_grid: np.
         np.ndarray: Boolean mask
     """
     lat_min, lat_max, lon_min, lon_max = region_bounds
-    mask = (lat_grid >= lat_min) & (lat_grid <= lat_max) & (lon_grid >= lon_min) & (lon_grid <= lon_max)
+    mask = (
+        (lat_grid >= lat_min)
+        & (lat_grid <= lat_max)
+        & (lon_grid >= lon_min)
+        & (lon_grid <= lon_max)
+    )
 
     logger.info(f"✅ Created region mask with {mask.sum()} cells")
     return mask

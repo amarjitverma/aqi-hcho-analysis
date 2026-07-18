@@ -95,9 +95,7 @@ class EvaluationPipeline:
         """
         results = {}
         for model_name, y_pred in predictions.items():
-            results[model_name] = self.evaluate_model(
-                y_true, y_pred, model_name, save_results
-            )
+            results[model_name] = self.evaluate_model(y_true, y_pred, model_name, save_results)
 
         # Generate comparison plot
         plot_metrics_comparison(

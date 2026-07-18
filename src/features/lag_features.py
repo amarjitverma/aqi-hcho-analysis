@@ -9,7 +9,9 @@ import numpy as np
 from loguru import logger
 
 
-def create_lag_features(df: pd.DataFrame, columns: list, lag_days: list = [1, 2, 3, 7]) -> pd.DataFrame:
+def create_lag_features(
+    df: pd.DataFrame, columns: list, lag_days: list = [1, 2, 3, 7]
+) -> pd.DataFrame:
     """
     Create lag features for specified columns.
 

@@ -23,28 +23,36 @@ class ConvLSTMModel(BaseModel):
         """Build ConvLSTM model."""
         from tensorflow.keras import layers, models
 
-        model = models.Sequential([
-            layers.ConvLSTM2D(
-                self.filters, kernel_size=self.kernel_size,
-                padding="same", return_sequences=True,
-                input_shape=input_shape
-            ),
-            layers.BatchNormalization(),
-            layers.ConvLSTM2D(
-                self.filters // 2, kernel_size=self.kernel_size,
-                padding="same", return_sequences=True
-            ),
-            layers.BatchNormalization(),
-            layers.ConvLSTM2D(
-                self.filters // 4, kernel_size=self.kernel_size,
-                padding="same", return_sequences=False
-            ),
-            layers.BatchNormalization(),
-            layers.Flatten(),
-            layers.Dense(64, activation="relu"),
-            layers.Dropout(0.2),
-            layers.Dense(1),
-        ])
+        model = models.Sequential(
+            [
+                layers.ConvLSTM2D(
+                    self.filters,
+                    kernel_size=self.kernel_size,
+                    padding="same",
+                    return_sequences=True,
+                    input_shape=input_shape,
+                ),
+                layers.BatchNormalization(),
+                layers.ConvLSTM2D(
+                    self.filters // 2,
+                    kernel_size=self.kernel_size,
+                    padding="same",
+                    return_sequences=True,
+                ),
+                layers.BatchNormalization(),
+                layers.ConvLSTM2D(
+                    self.filters // 4,
+                    kernel_size=self.kernel_size,
+                    padding="same",
+                    return_sequences=False,
+                ),
+                layers.BatchNormalization(),
+                layers.Flatten(),
+                layers.Dense(64, activation="relu"),
+                layers.Dropout(0.2),
+                layers.Dense(1),
+            ]
+        )
 
         self.model = model
         return model
@@ -60,7 +68,8 @@ class ConvLSTMModel(BaseModel):
             ),
         ]
         history = self.model.fit(
-            X_train, y_train,
+            X_train,
+            y_train,
             validation_data=(X_val, y_val),
             epochs=epochs,
             batch_size=batch_size,

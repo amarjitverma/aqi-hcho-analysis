@@ -24,29 +24,29 @@ load_dotenv()
 
 # ── Known good sensor IDs (OpenAQ v3) that have historical Indian CPCB data ──
 KNOWN_INDIA_SENSORS = {
-    "Delhi":     [1930, 1931, 1932, 2120, 2121, 8118, 8119, 8120],
-    "Mumbai":    [2200, 2201, 2202, 8200, 8201],
-    "Kolkata":   [2300, 2301, 8300, 8301],
+    "Delhi": [1930, 1931, 1932, 2120, 2121, 8118, 8119, 8120],
+    "Mumbai": [2200, 2201, 2202, 8200, 8201],
+    "Kolkata": [2300, 2301, 8300, 8301],
     "Bengaluru": [2400, 2401, 8400, 8401],
-    "Chennai":   [2500, 2501, 8500, 8501],
+    "Chennai": [2500, 2501, 8500, 8501],
 }
 
 # Realistic PM2.5 seasonal statistics per city (µg/m³) — Oct/Nov peak
 CITY_STATS = {
-    "Delhi":     {"mean": 145, "std": 60, "min": 40,  "max": 350},
-    "Mumbai":    {"mean": 55,  "std": 20, "min": 20,  "max": 130},
-    "Kolkata":   {"mean": 90,  "std": 35, "min": 30,  "max": 210},
-    "Bengaluru": {"mean": 45,  "std": 15, "min": 15,  "max": 100},
-    "Chennai":   {"mean": 40,  "std": 12, "min": 12,  "max": 85},
+    "Delhi": {"mean": 145, "std": 60, "min": 40, "max": 350},
+    "Mumbai": {"mean": 55, "std": 20, "min": 20, "max": 130},
+    "Kolkata": {"mean": 90, "std": 35, "min": 30, "max": 210},
+    "Bengaluru": {"mean": 45, "std": 15, "min": 15, "max": 100},
+    "Chennai": {"mean": 40, "std": 12, "min": 12, "max": 85},
 }
 
 # CPCB station coordinates (lat, lon)
 CITY_COORDS = {
-    "Delhi":     (28.6139, 77.2090),
-    "Mumbai":    (19.0760, 72.8777),
-    "Kolkata":   (22.5726, 88.3639),
+    "Delhi": (28.6139, 77.2090),
+    "Mumbai": (19.0760, 72.8777),
+    "Kolkata": (22.5726, 88.3639),
     "Bengaluru": (12.9716, 77.5946),
-    "Chennai":   (13.0827, 80.2707),
+    "Chennai": (13.0827, 80.2707),
 }
 
 
@@ -123,21 +123,25 @@ def download_cpcb(
         for s in loc.get("sensors", []):
             param_name = s.get("parameter", {}).get("name", "")
             if param_name in ("pm25", "pm2.5"):
-                city_sensors[matched_city].append({
-                    "sensor_id": s["id"],
-                    "lat": coords.get("latitude") or CITY_COORDS[matched_city][0],
-                    "lon": coords.get("longitude") or CITY_COORDS[matched_city][1],
-                })
+                city_sensors[matched_city].append(
+                    {
+                        "sensor_id": s["id"],
+                        "lat": coords.get("latitude") or CITY_COORDS[matched_city][0],
+                        "lon": coords.get("longitude") or CITY_COORDS[matched_city][1],
+                    }
+                )
 
     # Supplement with known sensor IDs for any city with < 3 sensors
     for city in cities:
         if len(city_sensors[city]) < 3:
             for sid in KNOWN_INDIA_SENSORS.get(city, []):
-                city_sensors[city].append({
-                    "sensor_id": sid,
-                    "lat": CITY_COORDS[city][0],
-                    "lon": CITY_COORDS[city][1],
-                })
+                city_sensors[city].append(
+                    {
+                        "sensor_id": sid,
+                        "lat": CITY_COORDS[city][0],
+                        "lon": CITY_COORDS[city][1],
+                    }
+                )
         city_sensors[city].sort(key=lambda x: x["sensor_id"], reverse=True)
 
     # ── Step 2: Query measurements per sensor (daily → hourly fallback) ───
@@ -149,7 +153,7 @@ def download_cpcb(
             m_url = f"https://api.openaq.org/v3/sensors/{sensor_id}/measurements/{endpoint}"
             m_params = {
                 "datetime_from": f"{start_date}T00:00:00Z",
-                "datetime_to":   f"{end_date}T23:59:59Z",
+                "datetime_to": f"{end_date}T23:59:59Z",
                 "limit": 200,
             }
             try:
@@ -158,18 +162,19 @@ def download_cpcb(
                     for item in res.json().get("results", []):
                         val = item.get("value")
                         if val is not None and val > 0:
-                            ts = (
-                                item.get("period", {}).get("datetimeFrom", {}).get("utc")
-                                or item.get("datetime", {}).get("utc")
+                            ts = item.get("period", {}).get("datetimeFrom", {}).get(
+                                "utc"
+                            ) or item.get("datetime", {}).get("utc")
+                            records.append(
+                                {
+                                    "city": city,
+                                    "pm25": round(float(val), 2),
+                                    "date": ts,
+                                    "latitude": s_info["lat"],
+                                    "longitude": s_info["lon"],
+                                    "source": "openaq",
+                                }
                             )
-                            records.append({
-                                "city": city,
-                                "pm25": round(float(val), 2),
-                                "date": ts,
-                                "latitude": s_info["lat"],
-                                "longitude": s_info["lon"],
-                                "source": "openaq",
-                            })
                     if records:
                         break
             except Exception:
@@ -224,34 +229,38 @@ def _generate_realistic_city_data(city: str, start_date: str, end_date: str) -> 
     n = len(dates)
     day_of_year = dates.day_of_year.values
     seasonal = 1 + 0.3 * np.sin(2 * np.pi * (day_of_year - 280) / 365)  # peak ~Oct
-    weekend = np.where(dates.weekday >= 5, 0.85, 1.0)                    # lower on weekends
+    weekend = np.where(dates.weekday >= 5, 0.85, 1.0)  # lower on weekends
     noise = np.random.lognormal(0, 0.25, n)
 
     pm25 = stats["mean"] * seasonal * weekend * noise
     pm25 = np.clip(pm25, stats["min"], stats["max"])
 
-    return pd.DataFrame({
-        "city":      [city] * n,
-        "pm25":      np.round(pm25, 2),
-        "date":      dates.strftime("%Y-%m-%dT00:00:00Z"),
-        "latitude":  [lat] * n,
-        "longitude": [lon] * n,
-        "source":    ["synthetic"] * n,
-    })
+    return pd.DataFrame(
+        {
+            "city": [city] * n,
+            "pm25": np.round(pm25, 2),
+            "date": dates.strftime("%Y-%m-%dT00:00:00Z"),
+            "latitude": [lat] * n,
+            "longitude": [lon] * n,
+            "source": ["synthetic"] * n,
+        }
+    )
 
 
 def _generate_mock_cpcb_data(n_points: int = 1000) -> pd.DataFrame:
     """Legacy mock data generator (kept for backward compatibility)."""
     np.random.seed(42)
     cities = list(CITY_STATS.keys())
-    return pd.DataFrame({
-        "city":      np.random.choice(cities, n_points),
-        "pm25":      np.random.uniform(20, 200, n_points),
-        "date":      pd.date_range("2024-01-01", periods=n_points),
-        "latitude":  np.random.uniform(8, 38, n_points),
-        "longitude": np.random.uniform(68, 98, n_points),
-        "source":    ["mock"] * n_points,
-    })
+    return pd.DataFrame(
+        {
+            "city": np.random.choice(cities, n_points),
+            "pm25": np.random.uniform(20, 200, n_points),
+            "date": pd.date_range("2024-01-01", periods=n_points),
+            "latitude": np.random.uniform(8, 38, n_points),
+            "longitude": np.random.uniform(68, 98, n_points),
+            "source": ["mock"] * n_points,
+        }
+    )
 
 
 if __name__ == "__main__":

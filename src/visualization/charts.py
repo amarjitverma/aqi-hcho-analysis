@@ -24,17 +24,16 @@ def create_scatter_plot(actual, predicted, title="Predicted vs Actual"):
     Returns:
         plotly.graph_objects.Figure: Scatter plot
     """
-    df = pd.DataFrame({
-        "Actual": actual,
-        "Predicted": predicted
-    })
+    df = pd.DataFrame({"Actual": actual, "Predicted": predicted})
 
     fig = px.scatter(
-        df, x="Actual", y="Predicted",
+        df,
+        x="Actual",
+        y="Predicted",
         title=title,
         labels={"Actual": "Actual PM2.5 (µg/m³)", "Predicted": "Predicted PM2.5 (µg/m³)"},
         trendline="ols",
-        color_discrete_sequence=["#1A73E8"]
+        color_discrete_sequence=["#1A73E8"],
     )
 
     # Add diagonal line
@@ -46,15 +45,11 @@ def create_scatter_plot(actual, predicted, title="Predicted vs Actual"):
             y=[min_val, max_val],
             mode="lines",
             name="Perfect Prediction",
-            line=dict(color="red", dash="dash")
+            line=dict(color="red", dash="dash"),
         )
     )
 
-    fig.update_layout(
-        template="plotly_dark",
-        hovermode="closest",
-        height=400
-    )
+    fig.update_layout(template="plotly_dark", hovermode="closest", height=400)
 
     return fig
 
@@ -71,30 +66,29 @@ def create_feature_importance(features, importance, title="Feature Importance"):
     Returns:
         plotly.graph_objects.Figure: Bar chart
     """
-    df = pd.DataFrame({
-        "Feature": features,
-        "Importance": importance
-    }).sort_values("Importance", ascending=True)
+    df = pd.DataFrame({"Feature": features, "Importance": importance}).sort_values(
+        "Importance", ascending=True
+    )
 
     fig = px.bar(
-        df, x="Importance", y="Feature",
+        df,
+        x="Importance",
+        y="Feature",
         orientation="h",
         title=title,
         labels={"Importance": "Importance (%)", "Feature": ""},
         color="Importance",
-        color_continuous_scale="Viridis"
+        color_continuous_scale="Viridis",
     )
 
-    fig.update_layout(
-        template="plotly_dark",
-        height=400,
-        showlegend=False
-    )
+    fig.update_layout(template="plotly_dark", height=400, showlegend=False)
 
     return fig
 
 
-def create_correlation_chart(lags, correlations, p_values, optimal_lag=None, title="Fire-HCHO Lagged Correlation"):
+def create_correlation_chart(
+    lags, correlations, p_values, optimal_lag=None, title="Fire-HCHO Lagged Correlation"
+):
     """
     Create a lagged correlation chart.
 
@@ -112,13 +106,15 @@ def create_correlation_chart(lags, correlations, p_values, optimal_lag=None, tit
 
     fig = go.Figure()
 
-    fig.add_trace(go.Bar(
-        x=lags,
-        y=correlations,
-        marker_color=colors,
-        text=[f"p={p:.3f}" for p in p_values],
-        textposition="outside"
-    ))
+    fig.add_trace(
+        go.Bar(
+            x=lags,
+            y=correlations,
+            marker_color=colors,
+            text=[f"p={p:.3f}" for p in p_values],
+            textposition="outside",
+        )
+    )
 
     fig.add_hline(y=0, line_dash="dash", line_color="gray")
 
@@ -131,7 +127,7 @@ def create_correlation_chart(lags, correlations, p_values, optimal_lag=None, tit
             showarrow=True,
             arrowhead=2,
             arrowsize=1,
-            arrowcolor="#2ECC71"
+            arrowcolor="#2ECC71",
         )
 
     fig.update_layout(
@@ -139,7 +135,7 @@ def create_correlation_chart(lags, correlations, p_values, optimal_lag=None, tit
         title=title,
         xaxis_title="Lag (Days)",
         yaxis_title="Pearson Correlation (r)",
-        height=400
+        height=400,
     )
 
     return fig
@@ -158,16 +154,10 @@ def create_pie_chart(labels, values, title="Source Region Contribution"):
         plotly.graph_objects.Figure: Pie chart
     """
     fig = px.pie(
-        names=labels,
-        values=values,
-        title=title,
-        color_discrete_sequence=px.colors.qualitative.Set3
+        names=labels, values=values, title=title, color_discrete_sequence=px.colors.qualitative.Set3
     )
 
-    fig.update_layout(
-        template="plotly_dark",
-        height=400
-    )
+    fig.update_layout(template="plotly_dark", height=400)
 
     return fig
 
@@ -183,80 +173,95 @@ def create_metrics_dashboard(metrics):
         plotly.graph_objects.Figure: Metrics dashboard
     """
     fig = make_subplots(
-        rows=2, cols=2,
+        rows=2,
+        cols=2,
         subplot_titles=("RMSE", "R²", "MAE", "MAPE"),
-        specs=[[{"type": "indicator"}, {"type": "indicator"}],
-               [{"type": "indicator"}, {"type": "indicator"}]]
+        specs=[
+            [{"type": "indicator"}, {"type": "indicator"}],
+            [{"type": "indicator"}, {"type": "indicator"}],
+        ],
     )
 
     # RMSE
-    fig.add_trace(go.Indicator(
-        mode="number+gauge",
-        value=metrics.get("rmse", 0),
-        title={"text": "RMSE"},
-        domain={"row": 0, "column": 0},
-        gauge={
-            "axis": {"range": [0, 30]},
-            "bar": {"color": "#2ECC71" if metrics.get("rmse", 0) < 15 else "#FF9800"},
-            "steps": [
-                {"range": [0, 15], "color": "#1B5E20"},
-                {"range": [15, 30], "color": "#4E342E"}
-            ]
-        }
-    ), row=1, col=1)
+    fig.add_trace(
+        go.Indicator(
+            mode="number+gauge",
+            value=metrics.get("rmse", 0),
+            title={"text": "RMSE"},
+            domain={"row": 0, "column": 0},
+            gauge={
+                "axis": {"range": [0, 30]},
+                "bar": {"color": "#2ECC71" if metrics.get("rmse", 0) < 15 else "#FF9800"},
+                "steps": [
+                    {"range": [0, 15], "color": "#1B5E20"},
+                    {"range": [15, 30], "color": "#4E342E"},
+                ],
+            },
+        ),
+        row=1,
+        col=1,
+    )
 
     # R²
-    fig.add_trace(go.Indicator(
-        mode="number+gauge",
-        value=metrics.get("r2", 0),
-        title={"text": "R²"},
-        domain={"row": 0, "column": 1},
-        gauge={
-            "axis": {"range": [0, 1]},
-            "bar": {"color": "#2ECC71" if metrics.get("r2", 0) > 0.8 else "#FF9800"},
-            "steps": [
-                {"range": [0.8, 1], "color": "#1B5E20"},
-                {"range": [0.6, 0.8], "color": "#4E342E"}
-            ]
-        }
-    ), row=1, col=2)
+    fig.add_trace(
+        go.Indicator(
+            mode="number+gauge",
+            value=metrics.get("r2", 0),
+            title={"text": "R²"},
+            domain={"row": 0, "column": 1},
+            gauge={
+                "axis": {"range": [0, 1]},
+                "bar": {"color": "#2ECC71" if metrics.get("r2", 0) > 0.8 else "#FF9800"},
+                "steps": [
+                    {"range": [0.8, 1], "color": "#1B5E20"},
+                    {"range": [0.6, 0.8], "color": "#4E342E"},
+                ],
+            },
+        ),
+        row=1,
+        col=2,
+    )
 
     # MAE
-    fig.add_trace(go.Indicator(
-        mode="number+gauge",
-        value=metrics.get("mae", 0),
-        title={"text": "MAE"},
-        domain={"row": 1, "column": 0},
-        gauge={
-            "axis": {"range": [0, 20]},
-            "bar": {"color": "#2ECC71" if metrics.get("mae", 0) < 10 else "#FF9800"},
-            "steps": [
-                {"range": [0, 10], "color": "#1B5E20"},
-                {"range": [10, 20], "color": "#4E342E"}
-            ]
-        }
-    ), row=2, col=1)
+    fig.add_trace(
+        go.Indicator(
+            mode="number+gauge",
+            value=metrics.get("mae", 0),
+            title={"text": "MAE"},
+            domain={"row": 1, "column": 0},
+            gauge={
+                "axis": {"range": [0, 20]},
+                "bar": {"color": "#2ECC71" if metrics.get("mae", 0) < 10 else "#FF9800"},
+                "steps": [
+                    {"range": [0, 10], "color": "#1B5E20"},
+                    {"range": [10, 20], "color": "#4E342E"},
+                ],
+            },
+        ),
+        row=2,
+        col=1,
+    )
 
     # MAPE
-    fig.add_trace(go.Indicator(
-        mode="number+gauge",
-        value=metrics.get("mape", 0),
-        title={"text": "MAPE %"},
-        domain={"row": 1, "column": 1},
-        gauge={
-            "axis": {"range": [0, 30]},
-            "bar": {"color": "#2ECC71" if metrics.get("mape", 0) < 20 else "#FF9800"},
-            "steps": [
-                {"range": [0, 20], "color": "#1B5E20"},
-                {"range": [20, 30], "color": "#4E342E"}
-            ]
-        }
-    ), row=2, col=2)
-
-    fig.update_layout(
-        template="plotly_dark",
-        height=500,
-        width=700
+    fig.add_trace(
+        go.Indicator(
+            mode="number+gauge",
+            value=metrics.get("mape", 0),
+            title={"text": "MAPE %"},
+            domain={"row": 1, "column": 1},
+            gauge={
+                "axis": {"range": [0, 30]},
+                "bar": {"color": "#2ECC71" if metrics.get("mape", 0) < 20 else "#FF9800"},
+                "steps": [
+                    {"range": [0, 20], "color": "#1B5E20"},
+                    {"range": [20, 30], "color": "#4E342E"},
+                ],
+            },
+        ),
+        row=2,
+        col=2,
     )
+
+    fig.update_layout(template="plotly_dark", height=500, width=700)
 
     return fig

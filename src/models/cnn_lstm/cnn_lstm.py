@@ -25,14 +25,18 @@ class CNNLSTMModel(BaseModel):
         model = models.Sequential()
 
         # CNN Part
-        model.add(layers.TimeDistributed(
-            layers.Conv2D(self.conv_filters, (3, 3), activation="relu", padding="same"),
-            input_shape=input_shape
-        ))
+        model.add(
+            layers.TimeDistributed(
+                layers.Conv2D(self.conv_filters, (3, 3), activation="relu", padding="same"),
+                input_shape=input_shape,
+            )
+        )
         model.add(layers.TimeDistributed(layers.MaxPooling2D((2, 2))))
-        model.add(layers.TimeDistributed(
-            layers.Conv2D(self.conv_filters * 2, (3, 3), activation="relu", padding="same")
-        ))
+        model.add(
+            layers.TimeDistributed(
+                layers.Conv2D(self.conv_filters * 2, (3, 3), activation="relu", padding="same")
+            )
+        )
         model.add(layers.TimeDistributed(layers.MaxPooling2D((2, 2))))
         model.add(layers.TimeDistributed(layers.Flatten()))
 
@@ -61,7 +65,8 @@ class CNNLSTMModel(BaseModel):
             ),
         ]
         history = self.model.fit(
-            X_train, y_train,
+            X_train,
+            y_train,
             validation_data=(X_val, y_val),
             epochs=epochs,
             batch_size=batch_size,

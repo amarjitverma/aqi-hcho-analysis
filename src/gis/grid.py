@@ -41,7 +41,9 @@ def create_grid(
     return lat_grid, lon_grid, (lat_centers, lon_centers)
 
 
-def get_grid_cell(lat: float, lon: float, lat_centers: np.ndarray, lon_centers: np.ndarray) -> tuple:
+def get_grid_cell(
+    lat: float, lon: float, lat_centers: np.ndarray, lon_centers: np.ndarray
+) -> tuple:
     """
     Find grid cell index for a given latitude/longitude.
 
@@ -59,7 +61,9 @@ def get_grid_cell(lat: float, lon: float, lat_centers: np.ndarray, lon_centers: 
     return lat_idx, lon_idx
 
 
-def grid_to_dataframe(lat_grid: np.ndarray, lon_grid: np.ndarray, data: np.ndarray = None) -> pd.DataFrame:
+def grid_to_dataframe(
+    lat_grid: np.ndarray, lon_grid: np.ndarray, data: np.ndarray = None
+) -> pd.DataFrame:
     """
     Convert grid to DataFrame.
 
@@ -71,10 +75,12 @@ def grid_to_dataframe(lat_grid: np.ndarray, lon_grid: np.ndarray, data: np.ndarr
     Returns:
         pd.DataFrame: Grid as DataFrame
     """
-    df = pd.DataFrame({
-        "latitude": lat_grid.flatten(),
-        "longitude": lon_grid.flatten(),
-    })
+    df = pd.DataFrame(
+        {
+            "latitude": lat_grid.flatten(),
+            "longitude": lon_grid.flatten(),
+        }
+    )
 
     if data is not None:
         df["value"] = data.flatten()

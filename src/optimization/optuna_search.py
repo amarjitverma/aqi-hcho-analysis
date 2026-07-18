@@ -59,8 +59,10 @@ def run_optuna_search(
         # Train
         trainer = Trainer(model=model.model, config={})
         trainer.train(
-            X_train, y_train,
-            X_val, y_val,
+            X_train,
+            y_train,
+            X_val,
+            y_val,
             epochs=30,
             batch_size=params.get("batch_size", 32),
             verbose=0,

@@ -19,18 +19,20 @@ load_dotenv()
 # India bounding box (initialized lazily to avoid exceptions during module imports)
 _india_bbox = None
 
+
 def get_india_bbox():
     global _india_bbox
     if _india_bbox is None:
         _india_bbox = ee.Geometry.Rectangle([68.0, 8.0, 98.0, 38.0])
     return _india_bbox
 
+
 # Product configurations
 PRODUCTS = {
     "NO2": {
         "collection": "COPERNICUS/S5P/OFFL/L3_NO2",
         "band": "tropospheric_NO2_column_number_density",
-        "qa_band": "cloud_fraction",      # use cloud_fraction < 0.3 as QA proxy
+        "qa_band": "cloud_fraction",  # use cloud_fraction < 0.3 as QA proxy
         "qa_type": "cloud",
         "scale": 0.00001,
         "unit": "mol/m²",
@@ -46,7 +48,7 @@ PRODUCTS = {
     "CO": {
         "collection": "COPERNICUS/S5P/OFFL/L3_CO",
         "band": "CO_column_number_density",
-        "qa_band": None,                   # no QA filter for CO
+        "qa_band": None,  # no QA filter for CO
         "qa_type": None,
         "scale": 0.00001,
         "unit": "mol/m²",
@@ -134,9 +136,7 @@ def download_sentinel5p(
     output_path = os.path.join(output_dir, f"{product}_{start_date}_{end_date}.tif")
 
     try:
-        geemap.ee_export_image(
-            image, filename=output_path, scale=2500, region=get_india_bbox()
-        )
+        geemap.ee_export_image(image, filename=output_path, scale=2500, region=get_india_bbox())
         logger.info(f"✅ Downloaded {product} to {output_path}")
         return output_path
     except Exception as e:
@@ -144,9 +144,7 @@ def download_sentinel5p(
         return None
 
 
-def download_all_sentinel5p(
-    years: int = 5, start_date: str = None, end_date: str = "2023-12-31"
-):
+def download_all_sentinel5p(years: int = 5, start_date: str = None, end_date: str = "2023-12-31"):
     """
     Download all Sentinel-5P products for multiple years.
 

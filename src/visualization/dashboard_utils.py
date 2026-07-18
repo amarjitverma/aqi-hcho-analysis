@@ -11,7 +11,9 @@ from pathlib import Path
 from loguru import logger
 
 
-def generate_aqi_grid(pm25_predictions, lat_grid, lon_grid, output_path="dashboard/cache/aqi_grid.json"):
+def generate_aqi_grid(
+    pm25_predictions, lat_grid, lon_grid, output_path="dashboard/cache/aqi_grid.json"
+):
     """
     Generate AQI grid data from PM2.5 predictions.
 
@@ -38,17 +40,19 @@ def generate_aqi_grid(pm25_predictions, lat_grid, lon_grid, output_path="dashboa
     for i in range(aqi_grid.shape[0]):
         for j in range(aqi_grid.shape[1]):
             if not np.isnan(aqi_grid[i, j]) and aqi_grid[i, j] > 0:
-                features.append({
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [float(lon_grid[i, j]), float(lat_grid[i, j])]
-                    },
-                    "properties": {
-                        "aqi": int(aqi_grid[i, j]),
-                        "pm25": float(pm25_predictions[i, j])
+                features.append(
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [float(lon_grid[i, j]), float(lat_grid[i, j])],
+                        },
+                        "properties": {
+                            "aqi": int(aqi_grid[i, j]),
+                            "pm25": float(pm25_predictions[i, j]),
+                        },
                     }
-                })
+                )
 
     geojson = {"type": "FeatureCollection", "features": features}
 
@@ -91,12 +95,7 @@ def generate_dashboard_data():
     # 6. Load model metrics
 
     # Example: Generate dummy metrics
-    dummy_metrics = {
-        "rmse": 12.4,
-        "mae": 8.7,
-        "r2": 0.87,
-        "mape": 14.2
-    }
+    dummy_metrics = {"rmse": 12.4, "mae": 8.7, "r2": 0.87, "mape": 14.2}
     generate_model_metrics(dummy_metrics)
 
     logger.info("✅ Dashboard data generation complete")

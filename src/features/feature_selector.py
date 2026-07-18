@@ -61,7 +61,7 @@ class RandomForestFeatureSelector:
 
         # Get feature importances
         importances = rf.feature_importances_
-        indices = np.argsort(importances)[::-1][:self.k]
+        indices = np.argsort(importances)[::-1][: self.k]
 
         self.support_ = np.zeros(len(X.columns), dtype=bool)
         self.support_[indices] = True

@@ -54,11 +54,13 @@ def points_to_geojson(points: list, properties: list = None) -> dict:
     features = []
     for i, (lon, lat) in enumerate(points):
         props = properties[i] if properties and i < len(properties) else {}
-        features.append({
-            "type": "Feature",
-            "geometry": {"type": "Point", "coordinates": [lon, lat]},
-            "properties": props,
-        })
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [lon, lat]},
+                "properties": props,
+            }
+        )
 
     return {"type": "FeatureCollection", "features": features}
 
