@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local Dataset and Heavy Cache Files
+data/raw/
+data/processed/
+data/external/
+data/interim/
+outputs/models/
+outputs/predictions/
+dashboard/cache/
+*.nc
+*.tif
+*.h5
+*.parquet
