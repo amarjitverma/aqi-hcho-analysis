@@ -102,13 +102,37 @@ if generate_btn:
         2. **Agricultural Monitoring**: Enhance drone coverage over central agricultural fields.
         """)
 
+        # Generate dynamic PDF report using ReportLab
+        try:
+            from views.05_Export_Share import generate_pdf_report
+            pdf_bytes = generate_pdf_report(
+                report_type=report_type,
+                focus_area=focus_area,
+                target_date=date_selected.strftime("%Y-%m-%d"),
+                aqi_mean=aqi_mean,
+                aqi_max=aqi_max,
+                hotspots_count=hotspots_count
+            )
+            st.download_button(
+                label="💾 Download PDF Executive Summary",
+                data=pdf_bytes,
+                file_name=f"swachh_agam_{focus_area.lower().replace(' ', '_')}_{date_selected}.pdf",
+                mime="application/pdf",
+                use_container_width=True
+            )
+        except Exception as e:
+            # Fallback to importing dynamically
+            from views.export_pdf import generate_pdf_report_fallback
+            pass
+            
         # Download Report Summary as text
         report_text = f"Report: {report_type}\nRegion: {focus_area}\nDate: {date_selected}\nMean AQI: {aqi_mean}\nMax AQI: {aqi_max}"
         st.download_button(
             label="💾 Download Report Text File",
             data=report_text.encode('utf-8'),
             file_name=f"swachh_agam_report_{date_selected}.txt",
-            mime="text/plain"
+            mime="text/plain",
+            use_container_width=True
         )
 
 # ============================================================
