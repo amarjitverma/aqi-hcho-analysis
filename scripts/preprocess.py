@@ -112,8 +112,8 @@ def main():
             import xarray as xr
             ds = xr.open_dataset(f)
             era5_datasets.append(ds)
-            if 'time' in ds.coords:
-                times = pd.to_datetime(ds.coords['time'].values).date
+            if 'valid_time' in ds.coords:
+                times = pd.to_datetime(ds.coords['valid_time'].values).date
                 dates_to_process.update(times)
             logger.info(f"Loaded ERA5 file {f.name}")
         except Exception as e:
@@ -218,12 +218,12 @@ def main():
             # 6. Extract ERA5 Meteorology parameters for this date
             # Interpolate to 0.25° grid coordinates
             for ds in era5_datasets:
-                if 'time' in ds.coords:
-                    times = pd.to_datetime(ds.coords['time'].values).date
+                if 'valid_time' in ds.coords:
+                    times = pd.to_datetime(ds.coords['valid_time'].values).date
                     if d in times:
                         try:
-                            # Slice time dimension
-                            day_ds = ds.sel(time=date_str).mean(dim='time') # average daily
+                            # Slice time dimension using valid_time
+                            day_ds = ds.sel(valid_time=date_str).mean(dim='valid_time') # average daily
                             # Interpolate to grid
                             day_interp = day_ds.interp(latitude=lat_grid[:, 0], longitude=lon_grid[0, :], method='linear')
                             
