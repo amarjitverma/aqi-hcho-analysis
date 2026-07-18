@@ -229,14 +229,32 @@ def main():
                             
                             # Map corresponding variables
                             # ERA5 variable names: u10, v10, t2m, d2m, blh
+                            t2m_val = None
+                            d2m_val = None
                             if 't2m' in day_interp:
                                 temp_vals = day_interp['t2m'].values.flatten() - 273.15 # Kelvin to Celsius
+                                t2m_val = day_interp['t2m'].values.flatten()
+                            if 'd2m' in day_interp:
+                                d2m_val = day_interp['d2m'].values.flatten()
                             if 'blh' in day_interp:
                                 blh_vals = day_interp['blh'].values.flatten()
                             if 'u10' in day_interp and 'v10' in day_interp:
                                 u10 = day_interp['u10'].values.flatten()
                                 v10 = day_interp['v10'].values.flatten()
                                 wind_speed_vals = np.sqrt(u10**2 + v10**2)
+                                
+                            # Compute Relative Humidity (RH) using Magnus-Tetens formula if both t2m and d2m are available
+                            if t2m_val is not None and d2m_val is not None:
+                                # t2m and d2m in Kelvin; convert to Celsius
+                                T_c = t2m_val - 273.15
+                                T_d = d2m_val - 273.15
+                                # Magnus formula coefficients
+                                a = 17.625
+                                b = 243.04
+                                alpha_T = (a * T_c) / (b + T_c)
+                                alpha_Td = (a * T_d) / (b + T_d)
+                                rh_vals = 100.0 * np.exp(alpha_Td - alpha_T)
+                                rh_vals = np.clip(rh_vals, 0.0, 100.0)
                             break
                         except Exception as e:
                             logger.warning(f"Error interpolating ERA5: {e}")
