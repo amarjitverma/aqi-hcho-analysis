@@ -17,7 +17,7 @@
         </head>
         <body>
             <h1>🌍 AQI & HCHO Hotspot Analysis Report</h1>
-            <p><strong>Generated:</strong> 2026-07-18T10:10:58.161356</p>
+            <p><strong>Generated:</strong> 2026-07-18T11:19:25.701113</p>
             <p><strong>Team:</strong> Swachh Agam</p>
             
             <h2>📊 Model Performance</h2>
@@ -31,6 +31,22 @@
                 </tr>
         
                 <tr>
+                    <td><strong>cnn_lstm</strong></td>
+                    <td class="metric-warning">19.76 µg/m³</td>
+                    <td>15.27 µg/m³</td>
+                    <td class="metric-bad">-0.015</td>
+                    <td>38.1%</td>
+                </tr>
+            
+                <tr>
+                    <td><strong>convlstm</strong></td>
+                    <td class="metric-bad">43.54 µg/m³</td>
+                    <td>38.65 µg/m³</td>
+                    <td class="metric-bad">-4.063</td>
+                    <td>65.6%</td>
+                </tr>
+            
+                <tr>
                     <td><strong>lstm</strong></td>
                     <td class="metric-bad">57.62 µg/m³</td>
                     <td>45.78 µg/m³</td>
@@ -38,11 +54,19 @@
                     <td>55.9%</td>
                 </tr>
             
+                <tr>
+                    <td><strong>transformer</strong></td>
+                    <td class="metric-bad">57.72 µg/m³</td>
+                    <td>45.76 µg/m³</td>
+                    <td class="metric-bad">-0.050</td>
+                    <td>55.6%</td>
+                </tr>
+            
             </table>
             
             <h2>🎯 Key Findings</h2>
             <ul>
-                <li>Best performing model: <strong>CNN-LSTM</strong> (RMSE: 57.62 µg/m³)</li>
+                <li>Best performing model: <strong>CNN-LSTM</strong> (RMSE: 19.76 µg/m³)</li>
                 <li>HCHO hotspots identified in IGP, Central India, and Northeast India</li>
                 <li>Optimal fire-HCHO lag: <strong>2 days</strong> (r = 0.74, p < 0.001)</li>
                 <li>Source attribution: IGP 72%, Central India 18%, Northeast 10%</li>
