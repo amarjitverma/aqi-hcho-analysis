@@ -152,12 +152,18 @@ with sub_col2:
 # Recent Alerts Log
 # ============================================================
 st.divider()
-st.subheader("📋 System Warning Dispatch Log")
+st.subheader("📋 System Warning Dispatch Log & API Endpoints")
+
+st.markdown("""
+🌍 **FastAPI Endpoints Configured**:
+- **Gateway Server**: `http://127.0.0.1:8000/` (GET status check)
+- **Real-Time Inference**: `http://127.0.0.1:8000/predict` (POST 7-step tensor sequence)
+""")
 
 logs = [
+    {"time": "11:25 AM", "event": "FastAPI Deployment", "detail": "Local prediction server booted at port 8000 successfully."},
     {"time": "11:15 AM", "event": "Sync Complete", "detail": "Active fire coordinate index updated (847 records loaded)."},
     {"time": "10:30 AM", "event": "Threshold Warning", "detail": f"HCHO hotspot at latitude 28.61, longitude 77.21 (Delhi) exceeded {hcho_threshold} ppb."},
-    {"time": "09:00 AM", "event": "Prediction Sync", "detail": f"LSTM Model finished prediction sequence. Max AQI predicted: 312."},
 ]
 
 for log in logs:
