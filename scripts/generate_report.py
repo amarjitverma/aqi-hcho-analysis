@@ -117,7 +117,7 @@ def main():
             min([m.get('rmse', 100) for m in report_data["models"].values()]) if report_data["models"] else 0
         )
         
-        with open(args.output, "w") as f:
+        with open(args.output, "w", encoding="utf-8") as f:
             f.write(html_content)
         
         logger.info(f"✅ HTML report saved to {args.output}")

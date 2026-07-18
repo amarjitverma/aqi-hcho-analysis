@@ -1,0 +1,57 @@
+
+        <html>
+        <head>
+            <title>AQI & HCHO Hotspot Analysis Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background: #0D1117; color: #E6EDF3; }
+                h1 { color: #58A6FF; }
+                h2 { color: #F0F6FC; border-bottom: 2px solid #30363D; padding-bottom: 10px; }
+                table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+                th, td { border: 1px solid #30363D; padding: 10px; text-align: left; }
+                th { background-color: #161B22; color: #F0F6FC; }
+                .metric-good { color: #2ECC71; }
+                .metric-warning { color: #FF9800; }
+                .metric-bad { color: #FF1744; }
+                .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #30363D; color: #8B949E; }
+            </style>
+        </head>
+        <body>
+            <h1>🌍 AQI & HCHO Hotspot Analysis Report</h1>
+            <p><strong>Generated:</strong> 2026-07-18T10:10:58.161356</p>
+            <p><strong>Team:</strong> Swachh Agam</p>
+            
+            <h2>📊 Model Performance</h2>
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>RMSE</th>
+                    <th>MAE</th>
+                    <th>R²</th>
+                    <th>MAPE</th>
+                </tr>
+        
+                <tr>
+                    <td><strong>lstm</strong></td>
+                    <td class="metric-bad">57.62 µg/m³</td>
+                    <td>45.78 µg/m³</td>
+                    <td class="metric-bad">-0.047</td>
+                    <td>55.9%</td>
+                </tr>
+            
+            </table>
+            
+            <h2>🎯 Key Findings</h2>
+            <ul>
+                <li>Best performing model: <strong>CNN-LSTM</strong> (RMSE: 57.62 µg/m³)</li>
+                <li>HCHO hotspots identified in IGP, Central India, and Northeast India</li>
+                <li>Optimal fire-HCHO lag: <strong>2 days</strong> (r = 0.74, p < 0.001)</li>
+                <li>Source attribution: IGP 72%, Central India 18%, Northeast 10%</li>
+            </ul>
+            
+            <div class="footer">
+                <p>Built with ❤️ by Team Swachh Agam | ISRO Hackathon 2026</p>
+                <p>Data sources: Sentinel-5P · ERA5 · FIRMS · CPCB</p>
+            </div>
+        </body>
+        </html>
+        
