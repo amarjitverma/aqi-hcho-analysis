@@ -13,9 +13,7 @@ description = "Satellite-based Surface AQI Prediction & HCHO Hotspot Analysis ov
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
-authors = [
-    {name = "Swachh Agam Team", email = "team@swachhagam.in"}
-]
+authors = []
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -66,9 +64,9 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-team/aqi-hcho-analysis"
-Repository = "https://github.com/your-team/aqi-hcho-analysis"
-Documentation = "https://aqi-hcho-analysis.readthedocs.io"
+Homepage = "https://github.com/amarjitverma/aqi-hcho-analysis"
+Repository = "https://github.com/amarjitverma/aqi-hcho-analysis"
+Documentation = "https://github.com/amarjitverma/aqi-hcho-analysis/wiki"
 
 [tool.black]
 line-length = 100

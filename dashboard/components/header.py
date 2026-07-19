@@ -16,7 +16,7 @@ def render_header():
             <h1 style='margin: 0; color: #0066CC; font-size: 2rem;'>🌍 Swachh Agam</h1>
             <div>
                 <p style='margin: 0; color: #333; font-weight: 600;'>Air Quality Dashboard</p>
-                <p style='margin: 0; color: #999; font-size: 0.85rem;'>ISRO Hackathon 2026</p>
+                <p style='margin: 0; color: #999; font-size: 0.85rem;'>Air Quality Monitoring</p>
             </div>
         </div>
         """, unsafe_allow_html=True)

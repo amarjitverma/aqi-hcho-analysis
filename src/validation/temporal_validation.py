@@ -59,7 +59,7 @@ def temporal_validation(
         summary[f"{key}_mean"] = np.mean(values)
         summary[f"{key}_std"] = np.std(values)
 
-    logger.info(f"✅ Temporal validation complete")
+    logger.info("✅ Temporal validation complete")
     logger.info(f"  RMSE: {summary['rmse_mean']:.4f} (±{summary['rmse_std']:.4f})")
 
     return {"results": results, "summary": summary}

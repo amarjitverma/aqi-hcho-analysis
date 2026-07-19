@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from loguru import logger
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict
 
 from src.models.lstm.lstm import LSTMModel
 from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel
@@ -48,7 +48,8 @@ class Predictor:
         Load a trained model.
 
         Args:
-            model_name (str): Name of the model ('lstm', 'cnn_lstm', 'convlstm', 'transformer', 'ensemble')
+            model_name (str): Name of the model
+            ('lstm', 'cnn_lstm', 'convlstm', 'transformer', 'ensemble')
             model_path (str): Path to model weights
             scaler: Scaler used during training
             feature_cols (list): Feature column names

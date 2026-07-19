@@ -4,7 +4,6 @@
 
 """Loads configuration from YAML files."""
 
-import os
 import yaml
 from pathlib import Path
 from loguru import logger

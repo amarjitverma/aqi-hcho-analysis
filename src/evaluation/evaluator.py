@@ -9,7 +9,7 @@ import pandas as pd
 import json
 from pathlib import Path
 from loguru import logger
-from typing import Dict, Any, Optional
+from typing import Dict
 
 from src.evaluation.metrics import calculate_all_metrics
 

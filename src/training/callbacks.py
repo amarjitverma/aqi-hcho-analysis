@@ -4,13 +4,10 @@
 
 """Custom training callbacks."""
 
-import os
-import json
 import numpy as np
 import tensorflow as tf
 from loguru import logger
 from pathlib import Path
-from typing import Dict, Any, Optional
 
 
 class EarlyStopping(tf.keras.callbacks.Callback):

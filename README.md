@@ -11,7 +11,7 @@ This project addresses two critical air quality challenges in India:
 1. **Surface AQI Prediction**: Predict PM2.5 concentrations using satellite data and deep learning (LSTM, CNN-LSTM, ConvLSTM, Transformer).
 2. **HCHO Hotspot Detection**: Identify formaldehyde hotspots from biomass burning using DBSCAN clustering and analyze fire-HCHO correlation.
 
-Built for **ISRO Bharatiya Antariksh Hackathon 2026**.
+This repository is structured as a public-facing analysis platform for monitoring air quality and biomass-burning signals over India.
 
 ---
 
@@ -125,23 +125,20 @@ streamlit run dashboard/app.py
 
 ---
 
-## 👥 Team
+## 👥 Project Context
 
-**Team Swachh Agam**
+This project is designed as an open research and monitoring workflow for satellite-based AQI and HCHO analysis over India.
 
-The Team comprises four students pursuing their BS in Data Science and Applications from IIT Madras, working together to build a comprehensive air quality monitoring and analysis platform for the ISRO Hackathon.
+---
 
-- **Amarjit Verma** — Team Lead, Integration & QA
-- **Siddharth Yadav** — Satellite Data & Preprocessing
-- **Anurag Kumar** — HCHO & Fire Analysis
-- **Ravi Kumar** — Dashboard & Visualization
+## 📬 Contact
+
+For questions, collaborations, or feedback, feel free to reach out:
+
+**Email**: [amarjitengr@gmail.com](mailto:amarjitengr@gmail.com)
 
 ---
 
 ## 📄 License
 
 MIT License
-
----
-
-**Built with ❤️ for ISRO Bharatiya Antariksh Hackathon 2026**

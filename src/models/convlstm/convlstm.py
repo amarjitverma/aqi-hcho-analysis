@@ -5,7 +5,6 @@
 """ConvLSTM model for spatiotemporal PM2.5 prediction."""
 
 import tensorflow as tf
-from tensorflow.keras import layers, models
 from src.models.base_model import BaseModel
 
 

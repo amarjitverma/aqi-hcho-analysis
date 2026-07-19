@@ -5,7 +5,7 @@
 """Model evaluation metrics calculations."""
 
 import numpy as np
-from typing import Dict, Any
+from typing import Dict
 from sklearn.metrics import (
     mean_squared_error,
     mean_absolute_error,

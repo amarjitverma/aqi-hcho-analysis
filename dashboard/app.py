@@ -235,7 +235,7 @@ with st.sidebar:
     }
     
     st.markdown("---")
-    st.caption("Team Swachh Agam | ISRO Hackathon 2026")
+    st.caption("Air Quality Dashboard")
 
 # ============================================================
 # Load Data
@@ -290,5 +290,5 @@ if metrics:
 st.markdown("---")
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.caption("🌍 Built with ❤️ by Team Swachh Agam | ISRO Hackathon 2026")
+    st.caption("🌍 Built for public AQI and HCHO monitoring")
     st.caption("📡 Data sources: Sentinel-5P · ERA5 · FIRMS · CPCB")

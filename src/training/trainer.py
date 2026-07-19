@@ -4,12 +4,11 @@
 
 """Base trainer class for deep learning models."""
 
-import os
 import time
 import numpy as np
 import tensorflow as tf
 from loguru import logger
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 
 

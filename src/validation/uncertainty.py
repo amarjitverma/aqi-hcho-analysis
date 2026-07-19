@@ -5,7 +5,6 @@
 """Uncertainty quantification methods for model predictions."""
 
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.gaussian_process import GaussianProcessRegressor
 from loguru import logger
 

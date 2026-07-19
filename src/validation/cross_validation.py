@@ -7,7 +7,7 @@
 import numpy as np
 from sklearn.model_selection import TimeSeriesSplit, KFold
 from loguru import logger
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Callable, Dict, List
 
 
 def cross_validate(
@@ -66,7 +66,7 @@ def cross_validate(
         summary[f"{key}_mean"] = np.mean(values)
         summary[f"{key}_std"] = np.std(values)
 
-    logger.info(f"✅ Cross-validation complete")
+    logger.info("✅ Cross-validation complete")
     logger.info(f"  RMSE: {summary['rmse_mean']:.4f} (±{summary['rmse_std']:.4f})")
     logger.info(f"  R²: {summary['r2_mean']:.4f} (±{summary['r2_std']:.4f})")
 

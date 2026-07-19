@@ -8,7 +8,6 @@ Aligns data to a common 0.25° grid using bilinear interpolation.
 
 import numpy as np
 import pandas as pd
-import xarray as xr
 from scipy.interpolate import RectBivariateSpline
 from loguru import logger
 

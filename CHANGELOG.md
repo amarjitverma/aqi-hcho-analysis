@@ -28,4 +28,4 @@ All notable changes to this project will be documented in this file.
 - Pre-commit hooks
 
 ### Contributors
-- Team Swachh Agam
+- Project contributors

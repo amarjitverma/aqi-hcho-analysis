@@ -5,7 +5,6 @@
 """Custom loss functions for model training."""
 
 import tensorflow as tf
-import numpy as np
 
 
 def mse_loss(y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:

@@ -115,7 +115,7 @@ def interpolate_missing_by_time(
     """
     from scipy.interpolate import interp1d
 
-    filled = data.copy()
+    _filled = data.copy()  # noqa: F841
     n_time = data.shape[time_axis]
 
     # Transpose so time is first axis

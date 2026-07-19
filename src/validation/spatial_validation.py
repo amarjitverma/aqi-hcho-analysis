@@ -5,8 +5,6 @@
 """Spatial validation methods for geospatial predictions."""
 
 import numpy as np
-from sklearn.model_selection import KFold
-from sklearn.neighbors import KDTree
 from loguru import logger
 
 
@@ -69,7 +67,7 @@ def spatial_validation(
         summary[f"{key}_mean"] = np.mean(values)
         summary[f"{key}_std"] = np.std(values)
 
-    logger.info(f"✅ Spatial validation complete")
+    logger.info("✅ Spatial validation complete")
     logger.info(f"  RMSE: {summary['rmse_mean']:.4f} (±{summary['rmse_std']:.4f})")
 
     return {"results": results, "summary": summary}

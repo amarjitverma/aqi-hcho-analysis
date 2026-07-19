@@ -8,8 +8,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
-import numpy as np
-from loguru import logger
 
 
 def create_scatter_plot(actual, predicted, title="Predicted vs Actual"):
@@ -102,7 +100,7 @@ def create_correlation_chart(
     Returns:
         plotly.graph_objects.Figure: Correlation chart
     """
-    colors = ["#888" if l != optimal_lag else "#2ECC71" for l in lags]
+    colors = ["#888" if lag_val != optimal_lag else "#2ECC71" for lag_val in lags]
 
     fig = go.Figure()
 

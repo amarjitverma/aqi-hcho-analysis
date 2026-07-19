@@ -2,7 +2,7 @@
 
 **Streamlit-based Interactive Dashboard for Satellite-based AQI Prediction & HCHO Hotspot Analysis**
 
-**Team**: Swachh Agam | ISRO Bharatiya Antariksh Hackathon 2026
+**Focus**: Satellite-based AQI and HCHO monitoring over India
 
 ---
 
@@ -304,23 +304,15 @@ streamlit run app.py
 
 ---
 
-## 👥 Team
+## 👥 Project Context
 
-**Swachh Agam** - ISRO Hackathon 2026
-
-| Role | Name | Responsibility |
-|------|------|-----------------|
-| Team Lead & Integration | Amarjit Verma | Overall integration & QA |
-| Dashboard Lead | Ravi Kumar | UI/UX and frontend |
-| Data & Preprocessing | Siddharth Yadav | Data pipeline |
-| Analysis | Anurag Kumar | HCHO & fire analysis |
+This dashboard is intended for public AQI and HCHO monitoring workflows over India.
 
 ---
 
 ## 📞 Support
 
 - **GitHub Issues**: [Report bugs](https://github.com/amarjitverma/aqi-hcho-analysis/issues)
-- **Email**: team@swachhagam.in
 - **Documentation**: [GitHub Wiki](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
 
 ---
@@ -343,4 +335,3 @@ MIT License - See LICENSE file in root directory
 
 **Last Updated**: July 16, 2026 | **Status**: Phase 1 Complete ✅
 
-**Built with ❤️ for ISRO Bharatiya Antariksh Hackathon 2026**

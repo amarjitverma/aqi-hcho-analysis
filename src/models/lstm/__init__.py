@@ -1,1 +1,1 @@
-from src.models.lstm.lstm import LSTMModel
+from src.models.lstm.lstm import LSTMModel  # noqa: F401

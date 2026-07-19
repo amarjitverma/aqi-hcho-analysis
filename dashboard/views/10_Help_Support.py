@@ -133,28 +133,12 @@ with tab4:
     
     ### Support Channels
     
-    **📧 Email Support**
-    - team@swachhagam.in
-    
     **🐙 GitHub Issues**
     - Report bugs: https://github.com/amarjitverma/aqi-hcho-analysis/issues
     
-    **💬 Discussion Forum**
-    - Community Slack channel: [Join Swachh Agam Slack](https://swachhagam.slack.com)
-    
-    ### Team Information
-    
-    **Swachh Agam Team** (ISRO Hackathon 2026)
-    - 👨‍💼 Amarjit Verma (Team Lead)
-    - 👨‍💻 Ravi Kumar (Dashboard)
-    - 👨‍💻 Siddharth Yadav (Data & Preprocessing)
-    - 👨‍💻 Anurag Kumar (Analysis)
-    
-    ### Resources
-    
-    - 📚 [GitHub Repository](https://github.com/amarjitverma/aqi-hcho-analysis)
-    - 📖 [Documentation Wiki](https://github.com/amarjitverma/aqi-hcho-analysis/wiki)
-    - 🎥 [Tutorial Introduction (YouTube)](https://youtube.com)
+    **📚 Project Resources**
+    - Repository: https://github.com/amarjitverma/aqi-hcho-analysis
+    - Documentation: https://github.com/amarjitverma/aqi-hcho-analysis/wiki
     
     ### Report an Issue
     """)
@@ -164,4 +148,4 @@ with tab4:
 
 # Footer
 st.markdown("---")
-st.caption("© 2026 Swachh Agam Team | ISRO Bharatiya Antariksh Hackathon 2026")
+st.caption("© 2026 AQI & HCHO Analysis")

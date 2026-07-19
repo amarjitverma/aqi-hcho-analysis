@@ -1,1 +1,1 @@
-from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel
+from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel  # noqa: F401

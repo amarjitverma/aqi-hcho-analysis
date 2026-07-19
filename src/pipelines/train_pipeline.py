@@ -8,13 +8,13 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from loguru import logger
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 from src.models.lstm.lstm import LSTMModel
 from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel
 from src.models.convlstm.convlstm import ConvLSTMModel
 from src.models.transformer.transformer import TransformerModel
-from src.models.ensemble.ensemble import EnsembleModel
+from src.models.ensemble.ensemble import EnsembleModel  # noqa: F401
 from src.training.trainer import Trainer
 from src.evaluation.evaluator import Evaluator
 from src.evaluation.visualizer import plot_learning_curves

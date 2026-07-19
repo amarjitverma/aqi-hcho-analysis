@@ -8,13 +8,13 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from loguru import logger
-from typing import Dict, Any, Optional
+from typing import Optional
 
 from src.models.lstm.lstm import LSTMModel
 from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel
 from src.models.convlstm.convlstm import ConvLSTMModel
 from src.models.transformer.transformer import TransformerModel
-from src.models.ensemble.ensemble import EnsembleModel
+from src.models.ensemble.ensemble import EnsembleModel  # noqa: F401
 
 
 class InferencePipeline:

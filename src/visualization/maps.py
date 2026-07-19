@@ -5,8 +5,6 @@
 """Interactive map generation using Folium."""
 
 import folium
-from folium import plugins
-import geopandas as gpd
 import json
 import numpy as np
 from pathlib import Path

@@ -5,10 +5,9 @@
 """Evaluation pipeline for model assessment."""
 
 import numpy as np
-import pandas as pd
 from pathlib import Path
 from loguru import logger
-from typing import Dict, Any, Optional
+from typing import Dict
 
 from src.evaluation.evaluator import Evaluator
 from src.evaluation.visualizer import (

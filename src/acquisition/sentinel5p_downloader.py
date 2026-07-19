@@ -10,7 +10,6 @@ Products: NO2, SO2, CO, O3, HCHO
 import ee
 import geemap
 import os
-import numpy as np
 from dotenv import load_dotenv
 from loguru import logger
 

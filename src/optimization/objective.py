@@ -6,7 +6,6 @@
 
 import optuna
 import numpy as np
-from loguru import logger
 
 from src.models.lstm.lstm import LSTMModel
 from src.models.cnn_lstm.cnn_lstm import CNNLSTMModel

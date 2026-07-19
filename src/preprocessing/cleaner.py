@@ -27,7 +27,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     # Remove rows with missing target
     if "pm25" in df.columns:
         df = df.dropna(subset=["pm25"])
-        logger.info(f"  Removed rows with missing PM2.5")
+        logger.info("  Removed rows with missing PM2.5")
 
     # Remove outliers using IQR
     for col in ["pm25", "aod", "no2", "so2", "co", "o3", "hcho"]:

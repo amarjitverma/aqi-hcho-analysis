@@ -15,7 +15,7 @@ from pydantic import BaseModel
 from typing import List, Dict
 
 # Add project root to path
-sys.path.append("f:\\Amarjit Verma\github\\aqi-hcho-analysis")
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from src.models.lstm.lstm import LSTMModel
 

@@ -42,7 +42,6 @@ def download_firms(
             return _generate_mock_fire_data()
 
     # India bounding box
-    bbox = "68.0,8.0,98.0,38.0"
 
     # Calculate range of days (max 5 allowed by FIRMS)
     try:
@@ -54,7 +53,8 @@ def download_firms(
         range_days = 1
 
     # FIRMS API URL
-    url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{api_key}/VIIRS_SNPP_SP/70.0,8.0,100.0,40.0/{range_days}/{start_date}"
+    base = "https://firms.modaps.eosdis.nasa.gov/api/area/csv"
+    url = f"{base}/{api_key}/VIIRS_SNPP_SP/70.0,8.0,100.0,40.0/{range_days}/{start_date}"
 
     try:
         response = requests.get(url, timeout=30)

@@ -6,7 +6,6 @@ project:
   name: "AQI & HCHO Hotspot Analysis"
   version: "1.0.0"
   description: "Satellite-based Surface AQI Prediction & HCHO Hotspot Analysis over India"
-  team: "Swachh Agam"
   date: "July 2026"
 
 # Data configuration

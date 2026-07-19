@@ -285,7 +285,7 @@ with footer_col1:
     st.markdown("""
     **Swachh Agam Dashboard**
     
-    ISRO Bharatiya Antariksh Hackathon 2026
+    Satellite-based AQI & HCHO analysis
     """)
 
 with footer_col2:
@@ -301,7 +301,7 @@ with footer_col3:
     
     - [GitHub](https://github.com/amarjitverma/aqi-hcho-analysis)
     - [Issues](https://github.com/amarjitverma/aqi-hcho-analysis/issues)
-    - [Team](https://github.com/amarjitverma)
+    - [Repository](https://github.com/amarjitverma/aqi-hcho-analysis)
     """)
 
-st.caption("© 2026 Team Swachh Agam - ISRO Hackathon 2026 | Satellite-based AQI & HCHO Analysis")
+st.caption("© 2026 Satellite-based AQI & HCHO Analysis")

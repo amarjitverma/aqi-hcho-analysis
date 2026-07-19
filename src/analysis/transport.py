@@ -74,7 +74,8 @@ def model_plume_transport(
 
     logger.info(f"  Wind: {wind_speed:.2f} m/s, {wind_dir:.1f}°")
     logger.info(
-        f"  At 100 km: HCHO = {plume_decay(hcho_source, 100, wind_speed, decay_constant):.4f} mol/m²"
+        f"  At 100 km: HCHO = "
+        f"{plume_decay(hcho_source, 100, wind_speed, decay_constant):.4f} mol/m²"
     )
 
     return plume

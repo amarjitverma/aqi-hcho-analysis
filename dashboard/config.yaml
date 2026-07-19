@@ -6,7 +6,6 @@ app:
   name: "Swachh Agam - Air Quality Dashboard"
   description: "Satellite-based AQI Prediction & HCHO Hotspot Analysis"
   version: "1.0.0"
-  team: "Swachh Agam (ISRO Hackathon 2026)"
 
 map:
   center_lat: 23.1815

@@ -260,7 +260,7 @@ def generate_pdf_report(report_type, focus_area, target_date, aqi_mean, aqi_max,
     
     # Footer notice
     story.append(Spacer(1, 30))
-    story.append(Paragraph("<i>This is an automated system generated report from Swachh Agam System (ISRO Hackathon 2026).</i>", body_style))
+    story.append(Paragraph("<i>This is an automated system-generated report from the AQI & HCHO analysis platform.</i>", body_style))
     
     doc.build(story)
     buffer.seek(0)

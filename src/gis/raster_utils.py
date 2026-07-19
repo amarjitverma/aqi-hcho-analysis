@@ -7,7 +7,6 @@
 import numpy as np
 import rasterio
 from rasterio.transform import from_origin
-from pathlib import Path
 from loguru import logger
 
 
@@ -87,9 +86,9 @@ def resample_raster(
     from rasterio.enums import Resampling
 
     if method == "bilinear":
-        resampling = Resampling.bilinear
+        _resampling = Resampling.bilinear
     elif method == "nearest":
-        resampling = Resampling.nearest
+        _resampling = Resampling.nearest  # noqa: F841
     else:
         raise ValueError(f"Unknown method: {method}")
 

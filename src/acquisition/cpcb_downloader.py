@@ -17,7 +17,6 @@ import time
 from dotenv import load_dotenv
 from loguru import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timedelta
 
 load_dotenv()
 

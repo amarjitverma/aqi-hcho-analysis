@@ -156,7 +156,9 @@ def validate_spatial_coverage(df: pd.DataFrame, bounds: tuple = (8, 38, 68, 98))
 
     if not results["full_coverage"]:
         logger.warning(
-            f"  Spatial coverage incomplete: lat {results['lat_min']}-{results['lat_max']}, lon {results['lon_min']}-{results['lon_max']}"
+            f"  Spatial coverage incomplete: "
+            f"lat {results['lat_min']}-{results['lat_max']}, "
+            f"lon {results['lon_min']}-{results['lon_max']}"
         )
 
     return results

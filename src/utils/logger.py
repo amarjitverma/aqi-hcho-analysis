@@ -27,7 +27,12 @@ def setup_logging(log_dir: str = "logs", level: str = "INFO"):
     # Add console handler
     logger.add(
         sys.stdout,
-        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>",
+        format=(
+            "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+            "<level>{level: <8}</level> | "
+            "<cyan>{name}</cyan>:<cyan>{function}</cyan> - "
+            "<level>{message}</level>"
+        ),
         level=level,
     )
 
@@ -46,7 +51,7 @@ def setup_logging(log_dir: str = "logs", level: str = "INFO"):
 
 
 # Create default logger instance
-logger = setup_logging()
+logger = setup_logging()  # noqa: F811
 
 
 def get_logger():
